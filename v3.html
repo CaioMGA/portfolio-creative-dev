@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caio Amaral · Desenvolvedor Criativo</title>
+<meta name="description" content="Desenvolvedor criativo, com 9 anos em games. Jogos 2D e 3D, simuladores e serious games, e projetos criativos feitos com IA em dias.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="v3.css?v=1">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<!-- cena 3D fixa atrás do conteúdo; cada projeto é um objeto que entra em foco no scroll -->
+<canvas id="scene" aria-hidden="true"></canvas>
+<div id="tip" class="mono" aria-hidden="true"></div>
+
+<div class="wrap">
+  <nav class="mono">
+    <span>caio amaral / desenvolvedor criativo</span>
+    <div><a href="#ia">com ia</a><a href="#metodo">como trabalho</a><a href="#trilha">trajetória</a><a href="#contato">contato</a></div>
+  </nav>
+
+  <header class="hero" id="hero">
+    <div class="hero-copy">
+      <h1>Tiro ideias do papel em <em>dias</em>, com IA.</h1>
+      <p>15 anos desenvolvendo software, 9 desenvolvendo games. Agora dedicado a soluções criativas com IA.</p>
+    </div>
+    <span class="mono hint">passe o mouse nos objetos · clique para ver o projeto</span>
+  </header>
+
+  <section id="ia">
+    <div class="intro panel">
+      <span class="mono">Criado com IA</span>
+      <h2>Projetos criativos que saíram do papel</h2>
+      <p class="lead">Ideias que antes não valiam o esforço. Com IA, viraram produtos no ar, alguns em poucos dias.</p>
+    </div>
+    <div id="stations"></div>
+    <p class="more"><a class="btn" href="https://brchad.com/" target="_blank" rel="noopener noreferrer">Entre outros ↗</a></p>
+  </section>
+
+  <section id="metodo" class="panel">
+    <span class="mono">Como trabalho com IA</span>
+    <h2>Do desafio criativo à solução testada</h2>
+    <ol class="phases">
+      <li><span class="mono">01 · desafio</span><h3>Entendo o problema</h3><p>Defino o desafio criativo que quero resolver e o que o jogador ou o usuário deve sentir.</p></li>
+      <li><span class="mono">02 · design</span><h3>Refino com a IA</h3><p>Exploro alternativas com a IA e refino o design, com diretrizes que escrevo a partir da minha experiência.</p></li>
+      <li><span class="mono">03 · solução</span><h3>Implemento e testo com a IA</h3><p>A IA implementa e testa seguindo as minhas diretrizes de implementação e de deploy. Quando surge um problema que ela não resolve, eu resolvo.</p></li>
+    </ol>
+  </section>
+
+  <section id="trilha" class="panel">
+    <span class="mono">Trajetória</span>
+    <h2>Como cheguei aqui</h2>
+    <div class="tracks">
+      <article>
+        <span class="mono">2010</span>
+        <h3>Estágio em TI</h3>
+        <p>Comecei como estagiário de TI.</p>
+      </article>
+      <article>
+        <span class="mono">2015</span>
+        <h3>Consultor analista e desenvolvedor front-end</h3>
+        <p>Grupo Amil e One Health.</p>
+      </article>
+      <article>
+        <span class="mono">2017</span>
+        <h3>Game developer</h3>
+        <p>Jogos 2D e 3D, simuladores, serious games, fun games, apps de streaming, jogos licenciados e jogos NFT.</p>
+      </article>
+      <article>
+        <span class="mono">2023</span>
+        <h3>Game designer</h3>
+        <p>Além de programar, passei a cuidar do game design de projetos novos.</p>
+      </article>
+      <article>
+        <span class="mono">2024</span>
+        <h3>Criação com IA</h3>
+        <p>Hoje escrevo as diretrizes de design, implementação e deploy a partir dessa bagagem. A IA me permite criar numa velocidade absurda, com uma qualidade altíssima.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="contato">
+    <div class="panel">
+      <span class="mono">Contato</span>
+      <h2>Tem um jogo ou uma ideia para tirar do papel? Me conta.</h2>
+      <div class="contact">
+        <button class="primary" id="copy" type="button">caiomga@gmail.com</button>
+        <span class="mono" id="msg" role="status">clique para copiar</span>
+        <a class="btn" href="https://devcriativo.substack.com/" target="_blank" rel="noopener noreferrer">Newsletter ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mono">© <span id="year">2026</span> Caio Amaral · feito com IA</footer>
+</div>
+<script src="projects-v2.js?v=2"></script>
+<script src="v3.js?v=1"></script>
+<script type="module" src="v3-scene.js?v=1"></script>
+</body>
+</html>
