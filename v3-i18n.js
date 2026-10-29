@@ -49,14 +49,17 @@
   };
   // textos escritos pelo JS (cópia do e-mail, tooltip da cena, etiqueta da fita)
   var JS = {
-    pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', spinTip: 'clique para girar', tapeSide: 'LADO A' },
-    en: { copied: 'copied', copyFail: 'select and copy it manually', spinTip: 'click to spin', tapeSide: 'SIDE A' },
+    pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', spinTip: 'clique para girar', lampTip: 'clique para puxar a cordinha', tapeSide: 'LADO A' },
+    en: { copied: 'copied', copyFail: 'select and copy it manually', spinTip: 'click to spin', lampTip: 'click to pull the cord', tapeSide: 'SIDE A' },
   };
-  // mesma ordem de projects-v2.js
+  // mesma ordem de PROJECTS (projects-v2.js + projects-v3.js): o índice casa os textos
   var PROJECTS_EN = [
     { title: 'BRCHAD Games', tag: 'Learn More',
       desc: 'A complete platform for puzzle games: editors, an archive of 200+ crosswords, a publishing server, an embeddable player, analytics and a dashboard. I built it with AI and integrated it into Cruzadinha.com.br in the same timeframe.',
       alt: 'BRChad Games Admin game schedule: stats, filters by type and period, and a calendar of scheduled games.' },
+    { title: 'Academia Paulista de Letras: new institutional website proposal', tag: 'See Live Demo',
+      desc: 'An independent prototype of a new website for the APL (the São Paulo Academy of Letters). With AI, I built two design proposals in 8 hours, Estante and Clássica, both fully implemented: real content from the 40 chairs and the academicians, 80 AI-written biographies to supplement the site, and an editing panel with roles for the staff and the academicians (in the full version).',
+      alt: 'Home of the prototype’s Estante version: a news carousel over an ornamental background and the banner saying this is not the Academy’s official site.' },
     { title: 'the stained hanes show 24/7 unstoppable stream', tag: '24/7 Streaming',
       desc: 'A site that streams the stained hanes show 24 hours a day. Everyone watches the same episode at the same second, on a 3D TV built with three.js. The whole site was made with AI, and the episode quotes were extracted with AI.',
       alt: 'the stained hanes show on air: the 3D TV playing episode S01E01, next to the episode’s quotes panel.' },

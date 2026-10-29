@@ -371,7 +371,63 @@ function makeBooks() {
   return g;
 }
 
+// Academia Paulista de Letras: lâmpada de banqueiro (a da versão Estante do site). Clicar puxa a cordinha e acende ou apaga.
+// A luz é uma só, criada com a cena: mudar o número de luzes recompilaria todos os materiais; aqui só muda a intensidade.
+function makeLamp() {
+  const g = new THREE.Group();
+  const brass = mat(0xc9a45c, { metalness: 1, roughness: .3 });
+  const dark = mat(0x2a2118, { roughness: .5 });
+  const base = cyl(.55, .14, brass, 48); base.position.y = -1; g.add(base);
+  const step = cyl(.4, .1, brass, 48); step.position.y = -.88; g.add(step);
+  const stem = cyl(.06, 1.45, brass, 20); stem.position.y = -.15; g.add(stem);
+  const collar = cyl(.1, .1, brass, 20); collar.position.y = -.55; g.add(collar);
+  const knob = new THREE.Mesh(new THREE.SphereGeometry(.1, 20, 14), brass); knob.position.y = .58; g.add(knob);
+
+  // cúpula: meio cilindro verde, aberto embaixo e nas pontas
+  const shadeMat = new THREE.MeshStandardMaterial({ color: 0x1d7a4c, roughness: .25, metalness: .1, side: THREE.DoubleSide, emissive: 0x3fbf7a, emissiveIntensity: 0 });
+  const shade = new THREE.Mesh(new THREE.CylinderGeometry(.44, .44, 1.5, 40, 1, true, 0, Math.PI), shadeMat);
+  shade.rotation.z = Math.PI / 2; shade.position.y = .62; g.add(shade);
+  [-.75, .75].forEach(x => {
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(.44, .02, 8, 40, Math.PI), brass);
+    rim.rotation.y = Math.PI / 2; rim.position.set(x, .62, 0); g.add(rim);
+  });
+
+  // lâmpada (emissiva) e a luz
+  const bulbMat = new THREE.MeshStandardMaterial({ color: 0xffe6b0, roughness: .4, emissive: 0xffb84d, emissiveIntensity: 0 });
+  const bulb = cyl(.1, .95, bulbMat, 20); bulb.rotation.z = Math.PI / 2; bulb.position.y = .52; g.add(bulb);
+  const light = new THREE.PointLight(0xffc477, 0, 7, 2); light.position.set(0, .45, 0); g.add(light);
+  const glowTex = canvasTex(128, 128, (x, w) => {
+    const r = x.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2);
+    r.addColorStop(0, 'rgba(255,200,120,.9)'); r.addColorStop(.35, 'rgba(255,170,80,.28)'); r.addColorStop(1, 'rgba(255,150,60,0)');
+    x.fillStyle = r; x.fillRect(0, 0, w, w);
+  });
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0, fog: false }));
+  glow.scale.setScalar(1.9); glow.position.set(0, .3, .25); glow.raycast = () => {}; g.add(glow);
+
+  // cordinha com argola, pendurada na ponta da cúpula
+  const pull = new THREE.Group(); pull.position.set(.6, .52, 0); g.add(pull);
+  const cord = cyl(.012, .9, dark, 8); cord.position.y = -.45; pull.add(cord);
+  const bead = new THREE.Mesh(new THREE.SphereGeometry(.06, 16, 12), brass); bead.position.y = -.92; pull.add(bead);
+
+  const st = { on: true, level: 1, pull: 0 };
+  g.userData.tip = 'lampTip';
+  g.userData.onClick = () => { st.on = !st.on; st.pull = 1; };
+  g.userData.tick = (t, dt, f) => {
+    st.level += ((st.on ? 1 : 0) - st.level) * (1 - Math.exp(-dt * 9));
+    st.pull *= Math.exp(-dt * 7);
+    const L = st.level;
+    // a luz forte só em foco: no fundo e na órbita a lâmpada brilha, mas não lava os vizinhos
+    light.intensity = L * (.3 + .7 * f) * 7;
+    bulbMat.emissiveIntensity = L * 2.2;
+    shadeMat.emissiveIntensity = L * .35;
+    glow.material.opacity = L * (.35 + .5 * f);
+    pull.position.y = .52 - st.pull * .14;
+  };
+  return g;
+}
+
 const MAKERS = {
+  lamp: makeLamp,
   'BRCHAD Games': makeGrid,
   'the stained hanes show 24/7 unstoppable stream': makeTV,
   'First of October Radio': makeRadio,
@@ -416,7 +472,7 @@ function start() {
   new MutationObserver(readTheme).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
   const holders = projects.map((p, i) => {
-    const obj = (MAKERS[p.title] || makeBooks)();
+    const obj = (MAKERS[p.obj] || MAKERS[p.title] || makeBooks)();
     // normaliza: todo objeto cabe numa caixa de ~2,6 e fica centrado no próprio holder
     const box = new THREE.Box3().setFromObject(obj);
     const size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());
@@ -426,7 +482,7 @@ function start() {
     const h = new THREE.Group();
     h.add(obj);
     h.scale.setScalar(.001);
-    h.userData = { i, title: p.title, tag: p.tag, tick: obj.userData.tick, yaw: 0, pitch: 0, spin: 0, spinFrom: 0, spinTo: 0, spinT: 1, hover: 0, focus: 0, shown: false };
+    h.userData = { i, title: p.title, tag: p.tag, tick: obj.userData.tick, onClick: obj.userData.onClick, tip: obj.userData.tip, yaw: 0, pitch: 0, spin: 0, spinFrom: 0, spinTo: 0, spinT: 1, hover: 0, focus: 0, shown: false };
     scene.add(h);
     return h;
   });
@@ -447,7 +503,7 @@ function start() {
   addEventListener('resize', resize);
 
   // posições de fundo, em fração da tela; a profundidade aumenta para a neblina engolir aos poucos
-  const BG = [[-.75, .55, -7], [.8, -.5, -9], [-.35, -.7, -11], [.55, .72, -12], [-.9, -.1, -14], [.15, .2, -16]];
+  const BG = [[-.75, .55, -7], [.8, -.5, -9], [-.35, -.7, -11], [.55, .72, -12], [-.9, -.1, -14], [.15, .2, -16], [-.55, -.3, -18]];
   const bgPos = (i, t, out) => {
     const [nx, ny, z] = BG[i % BG.length], k = (CAM_Z - z) / CAM_Z;
     return out.set(nx * halfW * k, ny * halfH * k + Math.sin(t * .4 + i) * .4, z);
@@ -514,7 +570,7 @@ function start() {
     const h = pick();
     if (!h) return;
     const u = h.userData;
-    if (u.focus > .5) spin(u); // o objeto em foco dá uma volta
+    if (u.focus > .5) (u.onClick || spin)(u); // o objeto em foco dá uma volta (ou faz o que é dele: a luminária liga e desliga)
     else if (stations[u.i]) window.goTo ? window.goTo(stations[u.i]) : stations[u.i].scrollIntoView({ block: 'start' });
   });
   // giro de 360° com duração fixa; se pedir outro no meio, emenda a partir de onde está
@@ -562,7 +618,7 @@ function start() {
     if (hovered) {
       const lang = window.v3lang;
       tip.textContent = hovered.userData.focus > .5
-        ? (lang ? lang.t('spinTip') : 'clique para girar')
+        ? (lang ? lang.t(hovered.userData.tip || 'spinTip') : 'clique para girar')
         : (lang ? lang.project(hovered.userData.i).title : hovered.userData.title);
       tip.style.left = pointer.cx + 'px'; tip.style.top = pointer.cy + 'px';
     }
