@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="v3.css?v=10">
+<link rel="stylesheet" href="v3.css?v=11">
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -19,100 +19,105 @@
 <script>document.documentElement.classList.add('loading')</script>
 </head>
 <body>
-<div id="loader" role="status" aria-label="Carregando">
+<!-- textos em PT-BR ficam aqui; data-i18n aponta para a tradução em v3-i18n.js -->
+<div id="loader" role="status" aria-label="Carregando" data-i18n-aria="loading">
   <div class="orbit"><span class="dot"></span></div>
   <strong id="pct">0%</strong>
-  <span class="mono">caio amaral / desenvolvedor criativo</span>
+  <span class="mono" data-i18n="brand">caio amaral / desenvolvedor criativo</span>
 </div>
 <!-- cena 3D fixa atrás do conteúdo; cada projeto é um objeto que entra em foco no scroll -->
 <canvas id="scene" aria-hidden="true"></canvas>
 <div id="tip" class="mono" aria-hidden="true"></div>
-<div class="pager" role="group" aria-label="Navegação entre telas">
-  <button id="prev" type="button">↑ Anterior</button><button id="next" type="button">Próximo ↓</button>
+<div class="pager" role="group" aria-label="Navegação entre telas" data-i18n-aria="pagerLabel">
+  <button id="prev" type="button" data-i18n="prev">↑ Anterior</button><button id="next" type="button" data-i18n="next">Próximo ↓</button>
 </div>
 
 <div class="wrap">
   <nav class="mono">
-    <span>caio amaral / desenvolvedor criativo</span>
-    <div><a href="#ia">com ia</a><a href="#metodo">como trabalho</a><a href="#trilha">trajetória</a><a href="#contato">contato</a></div>
+    <span data-i18n="brand">caio amaral / desenvolvedor criativo</span>
+    <div class="links"><a href="#ia" data-i18n="navIa">com ia</a><a href="#metodo" data-i18n="navMetodo">como trabalho</a><a href="#trilha" data-i18n="navTrilha">trajetória</a><a href="#contato" data-i18n="navContato">contato</a></div>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="pt" lang="pt-BR">PT</button><button type="button" data-lang="en" lang="en">EN</button>
+    </div>
   </nav>
 
   <header class="hero" id="hero">
     <div class="hero-copy">
-      <h1>Tiro ideias do papel em <em>dias</em>, com IA.</h1>
-      <p>15 anos desenvolvendo software, 9 desenvolvendo games. Agora dedicado a soluções criativas com IA.</p>
+      <h1 data-i18n="h1">Tiro ideias do papel em <em>dias</em>, com IA.</h1>
+      <p data-i18n="heroP">15 anos desenvolvendo software, 9 desenvolvendo games. Agora dedicado a soluções criativas com IA.</p>
     </div>
-    <span class="mono hint">passe o mouse nos objetos · clique para ver o projeto</span>
+    <span class="mono hint" data-i18n="hint">passe o mouse nos objetos · clique para ver o projeto</span>
   </header>
 
   <section id="ia" class="screen">
     <div class="intro panel">
-      <span class="mono">Criado com IA</span>
-      <h2>Projetos criativos que saíram do papel</h2>
-      <p class="lead">Ideias que viram produtos em poucos dias.</p>
+      <span class="mono" data-i18n="iaLabel">Criado com IA</span>
+      <h2 data-i18n="iaTitle">Projetos criativos que saíram do papel</h2>
+      <p class="lead" data-i18n="iaLead">Ideias que viram produtos em poucos dias.</p>
     </div>
   </section>
   <div id="stations"></div>
   <!-- v3.js move este link para a tela do último projeto -->
-  <p class="more"><a class="btn" href="https://brchad.com/" target="_blank" rel="noopener noreferrer">Entre outros ↗</a></p>
+  <p class="more"><a class="btn" href="https://brchad.com/" target="_blank" rel="noopener noreferrer" data-i18n="more">Entre outros ↗</a></p>
 
   <section id="metodo" class="screen"><div class="panel">
-    <span class="mono">Como trabalho com IA</span>
-    <h2>Do desafio criativo à solução testada</h2>
+    <span class="mono" data-i18n="metLabel">Como trabalho com IA</span>
+    <h2 data-i18n="metTitle">Do desafio criativo à solução testada</h2>
     <ol class="phases">
-      <li><span class="mono">01 · desafio</span><h3>Entendo o problema</h3><p>Defino o desafio criativo que quero resolver e o que o jogador ou o usuário deve sentir.</p></li>
-      <li><span class="mono">02 · design</span><h3>Refino com a IA</h3><p>Exploro alternativas com a IA e refino o design, com diretrizes que escrevo a partir da minha experiência.</p></li>
-      <li><span class="mono">03 · solução</span><h3>Implemento e testo com a IA</h3><p>A IA implementa e testa seguindo as minhas diretrizes de implementação e de deploy. Quando surge um problema que ela não resolve, eu resolvo.</p></li>
+      <li><span class="mono" data-i18n="ph1k">01 · desafio</span><h3 data-i18n="ph1t">Entendo o problema</h3><p data-i18n="ph1p">Defino o desafio criativo que quero resolver e o que o jogador ou o usuário deve sentir.</p></li>
+      <li><span class="mono" data-i18n="ph2k">02 · design</span><h3 data-i18n="ph2t">Refino com a IA</h3><p data-i18n="ph2p">Exploro alternativas com a IA e refino o design, com diretrizes que escrevo a partir da minha experiência.</p></li>
+      <li><span class="mono" data-i18n="ph3k">03 · solução</span><h3 data-i18n="ph3t">Implemento e testo com a IA</h3><p data-i18n="ph3p">A IA implementa e testa seguindo as minhas diretrizes de implementação e de deploy. Quando surge um problema que ela não resolve, eu resolvo.</p></li>
     </ol>
   </div></section>
 
   <section id="trilha" class="screen"><div class="panel">
-    <span class="mono">Trajetória</span>
-    <h2>Como cheguei aqui</h2>
+    <span class="mono" data-i18n="triLabel">Trajetória</span>
+    <h2 data-i18n="triTitle">Como cheguei aqui</h2>
     <div class="tracks">
       <article>
         <span class="mono">2010</span>
-        <h3>Estágio em TI</h3>
-        <p>Comecei como estagiário de TI.</p>
+        <h3 data-i18n="t2010">Estágio em TI</h3>
+        <p data-i18n="t2010p">Comecei como estagiário de TI.</p>
       </article>
       <article>
         <span class="mono">2015</span>
-        <h3>Consultor analista e desenvolvedor front-end</h3>
-        <p>Grupo Amil e One Health.</p>
+        <h3 data-i18n="t2015">Consultor analista e desenvolvedor front-end</h3>
+        <p data-i18n="t2015p">Grupo Amil e One Health.</p>
       </article>
       <article>
         <span class="mono">2017</span>
         <h3>Game developer</h3>
-        <p>Jogos 2D e 3D, simuladores, serious games, fun games, apps de streaming, jogos licenciados e jogos NFT.</p>
+        <p data-i18n="t2017p">Jogos 2D e 3D, simuladores, serious games, fun games, apps de streaming, jogos licenciados e jogos NFT.</p>
       </article>
       <article>
         <span class="mono">2023</span>
         <h3>Game designer</h3>
-        <p>Além de programar, passei a cuidar do game design de projetos novos.</p>
+        <p data-i18n="t2023p">Além de programar, passei a cuidar do game design de projetos novos.</p>
       </article>
       <article>
         <span class="mono">2024</span>
-        <h3>Criação com IA</h3>
-        <p>Hoje escrevo as diretrizes de design, implementação e deploy a partir dessa bagagem. A IA me permite criar numa velocidade absurda, com uma qualidade altíssima.</p>
+        <h3 data-i18n="t2024">Criação com IA</h3>
+        <p data-i18n="t2024p">Hoje escrevo as diretrizes de design, implementação e deploy a partir dessa bagagem. A IA me permite criar numa velocidade absurda, com uma qualidade altíssima.</p>
       </article>
     </div>
   </div></section>
 
   <section id="contato" class="screen">
     <div class="panel">
-      <span class="mono">Contato</span>
-      <h2>Tem um jogo ou uma ideia para tirar do papel? Me conta.</h2>
+      <span class="mono" data-i18n="conLabel">Contato</span>
+      <h2 data-i18n="conTitle">Tem um jogo ou uma ideia para tirar do papel? Me conta.</h2>
       <div class="contact">
         <button class="primary" id="copy" type="button">caiomga@gmail.com</button>
-        <span class="mono" id="msg" role="status">clique para copiar</span>
+        <span class="mono" id="msg" role="status" data-i18n="copyHint">clique para copiar</span>
         <a class="btn" href="https://devcriativo.substack.com/" target="_blank" rel="noopener noreferrer">Newsletter ↗</a>
       </div>
     </div>
-    <footer class="mono"><span>© <span id="year">2026</span> Caio Amaral · feito com IA</span><a class="btn" id="top" href="#hero">Voltar ao topo ↑</a></footer>
+    <footer class="mono"><span>© <span id="year">2026</span> Caio Amaral · <span data-i18n="made">feito com IA</span></span><a class="btn" id="top" href="#hero" data-i18n="top">Voltar ao topo ↑</a></footer>
   </section>
 </div>
 <script src="projects-v2.js?v=2"></script>
-<script src="v3.js?v=7"></script>
-<script type="module" src="v3-scene.js?v=15"></script>
+<script src="v3-i18n.js?v=1"></script>
+<script src="v3.js?v=8"></script>
+<script type="module" src="v3-scene.js?v=18"></script>
 </body>
 </html>

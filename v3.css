@@ -56,6 +56,12 @@ nav{position:absolute;z-index:2;top:0;left:0;right:0;display:flex;justify-conten
 nav a{text-decoration:none}
 nav a:hover{color:var(--accent)}
 nav div{display:flex;gap:20px;flex-wrap:wrap}
+nav>span{margin-right:auto}
+/* seletor de idioma PT | EN */
+nav .lang{gap:2px}
+.lang button{font:inherit;letter-spacing:inherit;padding:0 4px;border:0;background:none;color:var(--muted);cursor:pointer}
+.lang button:hover{color:var(--accent)}
+.lang button[aria-pressed="true"]{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
 
 .hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-bottom:56px}
 .hero-copy{max-width:min(560px,48%)}
@@ -131,6 +137,8 @@ footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content
   /* menu numa linha só, abaixo do nome */
   nav.mono{font-size:11px;letter-spacing:.04em;padding-block:14px;gap:6px}
   nav div{gap:14px}
+  nav .lang{order:1}
+  nav .links{order:2;flex-basis:100%}
   /* telas de texto: espaço para os botões fixos e menos respiro interno */
   .screen{padding-block:32px 84px}
   .panel{padding:20px}

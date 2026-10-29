@@ -4,6 +4,9 @@
 
   var list = document.getElementById('stations');
   var all = window.PROJECTS || [];
+  var i18n = window.v3lang;
+  var text = function (i) { return i18n ? i18n.project(i) : all[i]; };
+  var fills = []; // um por card: reescreve os textos no idioma atual
   all.forEach(function (p, i) {
     var st = document.createElement('article');
     st.className = 'station';
@@ -11,23 +14,31 @@
     st.dataset.i = i;
     var card = document.createElement('div'); card.className = 'card panel';
     var count = document.createElement('span'); count.className = 'mono count';
-    var tag = document.createElement('b'); tag.textContent = p.tag;
+    var tag = document.createElement('b');
     var n = document.createElement('span');
     n.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(all.length).padStart(2, '0');
     count.append(tag, n);
-    var h = document.createElement('h3'); h.textContent = p.title;
-    var d = document.createElement('p'); d.textContent = p.desc;
+    var h = document.createElement('h3');
+    var d = document.createElement('p');
     var fig = document.createElement('figure');
     var img = document.createElement('img');
-    img.src = p.img; img.alt = p.alt || p.title; img.loading = 'lazy';
+    img.src = p.img; img.loading = 'lazy';
     if (p.fit) img.className = p.fit;
     fig.append(img);
-    var a = document.createElement('a'); a.className = 'btn'; a.href = p.href; a.textContent = p.tag + ' ↗';
+    var a = document.createElement('a'); a.className = 'btn'; a.href = p.href;
     a.target = '_blank'; a.rel = 'noopener noreferrer';
+    fills.push(function () {
+      var x = text(i);
+      tag.textContent = x.tag; h.textContent = x.title; d.textContent = x.desc;
+      img.alt = x.alt || x.title; a.textContent = x.tag + ' ↗';
+    });
     card.append(count, h, d, fig, a);
     st.append(card);
     list.append(st);
   });
+  function fillAll() { fills.forEach(function (f) { f(); }); }
+  fillAll();
+  document.addEventListener('langchange', fillAll);
 
   // se o three.js não carregou (CDN fora, navegador antigo), mostra a versão sem 3D
   addEventListener('load', function () {
@@ -175,8 +186,8 @@
 
   var b = document.getElementById('copy'), m = document.getElementById('msg');
   b.addEventListener('click', function () {
-    var ok = function () { m.textContent = 'copiado'; };
-    var fail = function () { m.textContent = 'selecione e copie manualmente'; };
+    var ok = function () { m.textContent = i18n ? i18n.t('copied') : 'copiado'; };
+    var fail = function () { m.textContent = i18n ? i18n.t('copyFail') : 'selecione e copie manualmente'; };
     try { navigator.clipboard.writeText('caiomga@gmail.com').then(ok, fail); } catch (e) { fail(); }
   });
 })();

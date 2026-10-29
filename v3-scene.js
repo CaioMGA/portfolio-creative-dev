@@ -210,17 +210,24 @@ function makeTape() {
   const red = mat(0xe8433f, { roughness: .35 });
   const dark = mat(0x1d1f27, { roughness: .5 });
   g.add(rbox(2.8, 1.75, .3, .08, red));
-  const label = canvasTex(768, 320, (x, w, h) => {
+  const drawLabel = (x, w, h) => {
+    x.clearRect(0, 0, w, h); x.textAlign = 'left';
     x.fillStyle = '#f3ecdc'; x.fillRect(0, 0, w, h);
     x.fillStyle = '#e8433f'; x.fillRect(0, 0, w, 14);
     x.fillStyle = '#12141a';
     x.font = `800 40px ${DISPLAY}`; x.fillText('MIXTAPE', 28, 54);
-    x.font = `500 22px ${MONO}`; x.textAlign = 'right'; x.fillText('LADO A', w - 28, 50);
+    x.font = `500 22px ${MONO}`; x.textAlign = 'right'; x.fillText(window.v3lang ? v3lang.t('tapeSide') : 'LADO A', w - 28, 50);
     x.strokeStyle = '#c9bfa8'; x.lineWidth = 2;
     for (const y of [278, 304]) { x.beginPath(); x.moveTo(28, y); x.lineTo(w - 28, y); x.stroke(); }
     x.textAlign = 'left'; x.font = `500 20px ${MONO}`; x.fillStyle = '#566074'; x.fillText('remix · share · 90 min', 28, 272);
     // janela recortada: os carretéis aparecem por aqui
     x.clearRect(80, 74, w - 160, 176);
+  };
+  const label = canvasTex(768, 320, drawLabel);
+  // "LADO A" / "SIDE A": redesenha a etiqueta quando o idioma muda
+  document.addEventListener('langchange', () => {
+    drawLabel(label.image.getContext('2d'), label.image.width, label.image.height);
+    label.needsUpdate = true;
   });
   const lab = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1), new THREE.MeshStandardMaterial({ map: label, alphaTest: .5, roughness: .7 }));
   lab.position.set(0, .2, .156); g.add(lab);
@@ -378,6 +385,7 @@ function start() {
   const projects = window.PROJECTS || [];
   const stations = [...document.querySelectorAll('.station')];
   const hero = document.getElementById('hero');
+  const heroCopy = hero.querySelector('.hero-copy');
   const contact = document.getElementById('contato');
   const tip = document.getElementById('tip');
 
@@ -445,8 +453,10 @@ function start() {
     return out.set(nx * halfW * k, ny * halfH * k + Math.sin(t * .4 + i) * .4, z);
   };
   // elipse da órbita do hero; os objetos e a linha pontilhada usam a mesma
+  // no celular a órbita ocupa o espaço livre entre o menu e o texto do hero (medido a cada frame)
+  let orbitCy = 1.5, orbitRy = 1.5, orbitFit = 1;
   const orbitPoint = (ang, out) => narrow
-    ? out.set(Math.cos(ang) * halfW * .55, halfH * .3 - Math.sin(ang) * 1.5, Math.sin(ang) * 1.4)
+    ? out.set(Math.cos(ang) * halfW * .55, orbitCy - Math.sin(ang) * orbitRy, Math.sin(ang) * 1.4)
     : out.set(halfW * .5 + Math.cos(ang) * Math.min(halfW * .36, 3.3), -.1 - Math.sin(ang) * 1.5, Math.sin(ang) * 1.8);
   const clusterPos = (i, a, t, out) => {
     orbitPoint(a + i / n * Math.PI * 2, out);
@@ -550,7 +560,10 @@ function start() {
     hovered = pointer.onCanvas && !pointer.touch ? pick() : null;
     document.body.classList.toggle('hovering', !!hovered);
     if (hovered) {
-      tip.textContent = hovered.userData.focus > .5 ? 'clique para girar' : hovered.userData.title;
+      const lang = window.v3lang;
+      tip.textContent = hovered.userData.focus > .5
+        ? (lang ? lang.t('spinTip') : 'clique para girar')
+        : (lang ? lang.project(hovered.userData.i).title : hovered.userData.title);
       tip.style.left = pointer.cx + 'px'; tip.style.top = pointer.cy + 'px';
     }
     tip.classList.toggle('on', !!hovered);
@@ -559,9 +572,17 @@ function start() {
     orbitSpeed += ((hovered || reduce ? 0 : .12) - orbitSpeed) * (1 - Math.exp(-dt * (hovered ? 14 : 1.5)));
     orbit += orbitSpeed * dt;
     const k = 1 - Math.exp(-dt * (reduce ? 12 : 3.2));
+    if (narrow) {
+      // a órbita mais os objetos pedem ~4,3 unidades de altura; se o espaço for menor, encolhe e achata
+      const navPx = 76, bottomPx = Math.max(navPx + 160, heroCopy.getBoundingClientRect().top - 12);
+      const room = (bottomPx - navPx) / vh * 2 * halfH;
+      orbitCy = halfH - (navPx + bottomPx) / 2 / vh * 2 * halfH;
+      orbitFit = Math.min(1, room / 4.3);
+      orbitRy = 1.5 * orbitFit;
+    }
     focusPos(f);
     let fs = focusScale();
-    const cs = narrow ? .5 : .72;
+    const cs = narrow ? .5 * orbitFit : Math.min(.72, halfW * .11); // desktop estreito: objetos da órbita menores
     // celular: o objeto em foco ocupa o espaço livre entre o topo da tela e o card da estação
     if (narrow) {
       const best = weights.indexOf(Math.max(...weights));
