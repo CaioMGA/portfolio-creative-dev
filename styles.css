@@ -42,6 +42,11 @@ h3{font:500 1.35rem/1.15 var(--display);margin:0}
 .numbers div{display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:16px}
 .numbers strong{font:800 clamp(2rem,5vw,3.2rem)/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 
+.approach{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px}
+.approach article{border-top:2px solid var(--accent);padding-top:16px;min-width:0}
+.approach h3{margin-bottom:10px}
+.approach p{margin:0;color:var(--muted);max-width:56ch}
+
 .tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
 .tracks article{background:var(--bg);padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .tracks p{margin:0;color:var(--muted);font-size:15.5px}
