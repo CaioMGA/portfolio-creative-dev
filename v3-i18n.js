@@ -49,8 +49,8 @@
   };
   // textos escritos pelo JS (cópia do e-mail, tooltip da cena, etiqueta da fita)
   var JS = {
-    pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', spinTip: 'clique para girar', lampTip: 'clique para puxar a cordinha', tapeSide: 'LADO A' },
-    en: { copied: 'copied', copyFail: 'select and copy it manually', spinTip: 'click to spin', lampTip: 'click to pull the cord', tapeSide: 'SIDE A' },
+    pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', spinTip: 'clique para girar', lampTip: 'clique para puxar a cordinha' },
+    en: { copied: 'copied', copyFail: 'select and copy it manually', spinTip: 'click to spin', lampTip: 'click to pull the cord' },
   };
   // mesma ordem de PROJECTS (projects-v2.js + projects-v3.js): o índice casa os textos
   var PROJECTS_EN = [
@@ -66,9 +66,6 @@
     { title: 'First of October Radio', tag: '24/7 Radio',
       desc: 'A 24/7 radio with no backend, built on YouTube videos. The site’s algorithm controls playback: whoever tunes in hears the same song, at the same second, as every other listener.',
       alt: 'First of October Radio artwork: red signal circles on a dark background.' },
-    { title: 'Mixtape', tag: 'web app',
-      desc: 'Make a tape, remix someone else’s and publish it to the community. The cassette is 3D and everything is saved in the browser.',
-      alt: 'Mixtape v1.0 playing a red 3D cassette, with volume control, player buttons and the Remix and Share buttons.' },
     { title: "Caio's Clocks", tag: 'See the Clocks',
       desc: 'One new creative-coding clock at a time, between 2025 and 2026. Each one tests a different visual idea.',
       alt: "Clock 17 from Caio's Clocks: a game board with cards, a die and a pawn." },

@@ -204,58 +204,6 @@ function makeRadio() {
   return g;
 }
 
-// Mixtape: fita cassete vermelha com os carretéis girando atrás da janela da etiqueta
-function makeTape() {
-  const g = new THREE.Group();
-  const red = mat(0xe8433f, { roughness: .35 });
-  const dark = mat(0x1d1f27, { roughness: .5 });
-  g.add(rbox(2.8, 1.75, .3, .08, red));
-  const drawLabel = (x, w, h) => {
-    x.clearRect(0, 0, w, h); x.textAlign = 'left';
-    x.fillStyle = '#f3ecdc'; x.fillRect(0, 0, w, h);
-    x.fillStyle = '#e8433f'; x.fillRect(0, 0, w, 14);
-    x.fillStyle = '#12141a';
-    x.font = `800 40px ${DISPLAY}`; x.fillText('MIXTAPE', 28, 54);
-    x.font = `500 22px ${MONO}`; x.textAlign = 'right'; x.fillText(window.v3lang ? v3lang.t('tapeSide') : 'LADO A', w - 28, 50);
-    x.strokeStyle = '#c9bfa8'; x.lineWidth = 2;
-    for (const y of [278, 304]) { x.beginPath(); x.moveTo(28, y); x.lineTo(w - 28, y); x.stroke(); }
-    x.textAlign = 'left'; x.font = `500 20px ${MONO}`; x.fillStyle = '#566074'; x.fillText('remix · share · 90 min', 28, 272);
-    // janela recortada: os carretéis aparecem por aqui
-    x.clearRect(80, 74, w - 160, 176);
-  };
-  const label = canvasTex(768, 320, drawLabel);
-  // "LADO A" / "SIDE A": redesenha a etiqueta quando o idioma muda
-  document.addEventListener('langchange', () => {
-    drawLabel(label.image.getContext('2d'), label.image.width, label.image.height);
-    label.needsUpdate = true;
-  });
-  const lab = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1), new THREE.MeshStandardMaterial({ map: label, alphaTest: .5, roughness: .7 }));
-  lab.position.set(0, .2, .156); g.add(lab);
-  const win = new THREE.Mesh(new THREE.PlaneGeometry(1.9, .55), dark); win.position.set(0, .2, .151); g.add(win);
-
-  const reelMat = mat(0xf4f1ea, { roughness: .4 });
-  const tapeMat = mat(0x3b2418, { roughness: .8 });
-  const reels = [-.62, .62].map((x, i) => {
-    const spool = cyl(i ? .24 : .27, .02, tapeMat, 40); spool.rotation.x = Math.PI / 2; spool.position.set(x, .2, .153); g.add(spool);
-    const reel = new THREE.Group(); reel.position.set(x, .2, .165);
-    const hub = cyl(.13, .02, reelMat, 32); hub.rotation.x = Math.PI / 2; reel.add(hub);
-    for (let j = 0; j < 6; j++) {
-      const tooth = rbox(.035, .07, .03, .01, dark);
-      const ang = j / 6 * Math.PI * 2;
-      tooth.position.set(Math.cos(ang) * .07, Math.sin(ang) * .07, .01); tooth.rotation.z = ang; reel.add(tooth);
-    }
-    g.add(reel); return reel;
-  });
-  const bottom = rbox(1.9, .36, .06, .025, mat(0xb8302c, { roughness: .4 })); bottom.position.set(0, -.68, .16); g.add(bottom);
-  [-.55, .55].forEach(x => { const hole = cyl(.06, .02, dark, 20); hole.rotation.x = Math.PI / 2; hole.position.set(x, -.68, .2); g.add(hole); });
-  const screwMat = mat(0x9aa0ab, { metalness: 1, roughness: .3 });
-  [[-1.28, .76], [1.28, .76], [-1.28, -.76], [1.28, -.76], [0, -.5]].forEach(([x, y]) => {
-    const sc = cyl(.04, .02, screwMat, 12); sc.rotation.x = Math.PI / 2; sc.position.set(x, y, .16); g.add(sc);
-  });
-  g.userData.tick = (t, dt, f) => { for (const r of reels) r.rotation.z -= dt * (.8 + 4 * f); };
-  return g;
-}
-
 // Caio's Clocks: relógio de parede com a hora de verdade
 function makeClock() {
   const g = new THREE.Group();
@@ -445,7 +393,6 @@ const MAKERS = {
   'BRCHAD Games': makeGrid,
   'the stained hanes show 24/7 unstoppable stream': makeTV,
   'First of October Radio': makeRadio,
-  'Mixtape': makeTape,
   "Caio's Clocks": makeClock,
   'Tomos do blog': makeBooks,
 };

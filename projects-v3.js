@@ -9,3 +9,5 @@ window.PROJECTS.splice(1, 0, {
   href: "https://apl-estante.pages.dev/",
   obj: "lamp",
 });
+// Mixtape fica fora da v3 (continua na v2); remover também a entrada de PROJECTS_EN em v3-i18n.js
+window.PROJECTS = window.PROJECTS.filter(function (p) { return p.title !== "Mixtape"; });
