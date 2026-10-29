@@ -34,6 +34,16 @@ a{color:inherit}
   opacity:0;transform:translate(-50%,-150%);transition:opacity .15s;white-space:nowrap}
 #tip.on{opacity:1}
 
+/* loading: no ar por pelo menos 4 s e até a cena 3D desenhar; a órbita pontilhada ecoa a do hero */
+#loader{display:none}
+.loading #loader,.leaving #loader{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  background:var(--bg);transition:opacity .7s}
+.leaving #loader{opacity:0;pointer-events:none}
+html.loading{overflow:hidden}
+#loader .orbit{position:relative;width:min(320px,70vw);aspect-ratio:2.2;border:2px dotted var(--muted);border-radius:50%}
+#loader .dot{position:absolute;left:0;top:0;width:14px;height:14px;margin:-7px;border-radius:50%;background:var(--accent)}
+#pct{font:800 clamp(2.4rem,6vw,4rem)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+
 /* tudo que é "vazio" deixa o ponteiro chegar ao canvas */
 .wrap,.hero,section,.station,#stations{pointer-events:none}
 nav,.hero-copy,.panel,.card,.more,footer{pointer-events:auto}
@@ -52,7 +62,7 @@ nav div{display:flex;gap:20px;flex-wrap:wrap}
 h1{font:800 clamp(2.4rem,5.6vw,4.6rem)/.98 var(--display);letter-spacing:-.03em;margin:0 0 22px;text-wrap:balance}
 h1 em{font-style:normal;color:var(--accent)}
 .hero-copy p{max-width:44ch;margin:0;font-size:1.1rem}
-.hint{position:absolute;left:0;bottom:20px}
+.hint{position:absolute;left:0;bottom:76px}
 .no-gl .hint{display:none}
 
 section{position:relative;padding-block:96px 0}
@@ -101,15 +111,23 @@ h3{font:500 1.35rem/1.15 var(--display);margin:0}
 button{font:500 14px var(--mono);letter-spacing:.04em;padding:12px 18px;border:1px solid var(--fg);background:transparent;color:var(--fg);cursor:pointer}
 button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
 button.primary:hover{filter:brightness(1.1)}
+/* Anterior / Próximo: fixos no centro da base, por cima da cena */
+.pager{position:fixed;z-index:3;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px}
+.pager button{padding:10px 14px;font-size:13px;background:var(--glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pager button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.pager button:disabled{opacity:.3;cursor:default}
+.no-gl .pager{display:none}
 footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .no-gl footer{position:static;margin-top:72px}
 
 /* celular: objeto 3D na metade de cima, texto embaixo */
 @media(max-width:800px){
-  .hero{justify-content:flex-end;padding-bottom:64px}
+  .hero{justify-content:flex-end;padding-bottom:112px}
   .hero-copy{max-width:none}
   .hint{display:none}
-  .station{align-items:flex-end;padding-bottom:6svh}
+  .station{align-items:flex-end;padding-bottom:calc(6svh + 52px)}
+  .pager{bottom:12px}
+  footer{bottom:68px}
   .station.last{justify-content:flex-end;align-items:stretch}
   .card{width:100%}
   .card figure{display:none}

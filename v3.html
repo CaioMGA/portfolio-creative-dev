@@ -8,18 +8,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="v3.css?v=6">
+<link rel="stylesheet" href="v3.css?v=8">
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
+<!-- a tela de loading só existe com JS; v3.js tira esta classe -->
+<script>document.documentElement.classList.add('loading')</script>
 </head>
 <body>
+<div id="loader" role="status" aria-label="Carregando">
+  <div class="orbit"><span class="dot"></span></div>
+  <strong id="pct">0%</strong>
+  <span class="mono">caio amaral / desenvolvedor criativo</span>
+</div>
 <!-- cena 3D fixa atrás do conteúdo; cada projeto é um objeto que entra em foco no scroll -->
 <canvas id="scene" aria-hidden="true"></canvas>
 <div id="tip" class="mono" aria-hidden="true"></div>
+<div class="pager" role="group" aria-label="Navegação entre telas">
+  <button id="prev" type="button">↑ Anterior</button><button id="next" type="button">Próximo ↓</button>
+</div>
 
 <div class="wrap">
   <nav class="mono">
@@ -102,7 +112,7 @@
   </section>
 </div>
 <script src="projects-v2.js?v=2"></script>
-<script src="v3.js?v=4"></script>
-<script type="module" src="v3-scene.js?v=12"></script>
+<script src="v3.js?v=6"></script>
+<script type="module" src="v3-scene.js?v=13"></script>
 </body>
 </html>

@@ -525,7 +525,7 @@ function start() {
 
   const tmp = new THREE.Vector3(), a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3(), f = new THREE.Vector3();
   const clock = new THREE.Clock();
-  let t = 0, orbit = 0, orbitSpeed = .12;
+  let t = 0, orbit = 0, orbitSpeed = .12, reveal = 0; // reveal: 0 enquanto a tela de loading está no ar
 
   function frame() {
     const dt = Math.min(clock.getDelta(), .05);
@@ -575,7 +575,9 @@ function start() {
     camera.position.x += (pointer.x * .35 - camera.position.x) * k;
     camera.position.y += (pointer.y * .2 - camera.position.y) * k;
     camera.lookAt(0, 0, 0);
-    updateDots(orbit, heroW);
+    const loaded = root.classList.contains('loaded');
+    reveal += ((loaded ? 1 : 0) - reveal) * (1 - Math.exp(-dt * 3));
+    updateDots(orbit, heroW * reveal);
 
     holders.forEach((h, i) => {
       const u = h.userData, w = weights[i] || 0;
@@ -591,6 +593,7 @@ function start() {
       s += (.6 - s) * contactW;
       s += (fs - s) * w;
       s *= 1 + u.hover * .14;
+      if (!loaded) s = .001; // os objetos crescem na órbita quando o loading sai
       h.scale.setScalar(h.scale.x + (s - h.scale.x) * kf);
 
       // em foco o objeto encara a câmera e segue o ponteiro; fora dele balança sozinho
@@ -613,6 +616,7 @@ function start() {
     renderer.clear();
     renderer.render(backScene, camera);
     renderer.render(scene, camera);
+    if (!root.classList.contains('scene-ready')) root.classList.add('scene-ready');
   }
 
   renderer.setAnimationLoop(frame);
