@@ -49,8 +49,8 @@
   };
   // textos escritos pelo JS (cópia do e-mail, tooltip da cena, etiqueta da fita)
   var JS = {
-    pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', spinTip: 'clique para girar', lampTip: 'clique para puxar a cordinha' },
-    en: { copied: 'copied', copyFail: 'select and copy it manually', spinTip: 'click to spin', lampTip: 'click to pull the cord' },
+    pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', spinTip: 'clique para girar', lampTip: 'clique para interagir' },
+    en: { copied: 'copied', copyFail: 'select and copy it manually', spinTip: 'click to spin', lampTip: 'click to interact' },
   };
   // mesma ordem de PROJECTS (projects-v2.js + projects-v3.js): o índice casa os textos
   var PROJECTS_EN = [
