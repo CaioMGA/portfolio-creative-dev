@@ -11,10 +11,17 @@
     a.className = 'proj';
     a.href = p.href || '#';
     if (/^https?:/.test(a.href)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    var fig = document.createElement('figure');
+    var img = document.createElement('img');
+    img.src = p.img; img.alt = p.alt || p.title; img.loading = 'lazy';
+    if (p.fit) img.className = p.fit;
+    fig.append(img);
+    var info = document.createElement('div'); info.className = 'info';
     var h = document.createElement('h3'); h.textContent = p.title;
     var d = document.createElement('p'); d.textContent = p.desc;
+    info.append(h, d);
     var y = document.createElement('span'); y.className = 'mono go'; y.textContent = p.tag + ' ↗';
-    a.append(h, d, y);
+    a.append(fig, info, y);
     list.append(a);
   });
 

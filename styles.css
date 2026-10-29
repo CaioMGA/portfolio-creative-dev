@@ -68,13 +68,18 @@ h3{font:500 1.35rem/1.15 var(--display);margin:0}
 .tags{list-style:none;margin:auto 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .tags li{font:400 12px var(--mono);border:1px solid var(--line);padding:3px 8px}
 
-.proj{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:8px 32px;padding:26px 0;border-top:1px solid var(--line);align-items:baseline;text-decoration:none;transition:padding .2s}
+.proj{display:grid;grid-template-columns:260px minmax(0,1fr) auto;gap:12px 28px;padding:24px 0;border-top:1px solid var(--line);align-items:center;text-decoration:none}
+.proj figure{margin:0;aspect-ratio:1200/630;background:var(--panel);border:1px solid var(--line);overflow:hidden}
+.proj img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .3s}
+.proj img.contain{object-fit:contain;object-position:center}
+.proj:hover img{transform:scale(1.04)}
+.proj .info{display:flex;flex-direction:column;gap:6px;min-width:0}
 .proj:last-child{border-bottom:1px solid var(--line)}
 .proj p{margin:0;color:var(--muted);max-width:56ch}
 .proj .go{color:var(--accent)}
-.proj:hover{padding-left:12px}
 .proj:hover h3{color:var(--accent)}
 @media(max-width:700px){.proj{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.proj img{transition:none}.proj:hover img{transform:none}}
 
 .contact{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 button{font:500 14px var(--mono);letter-spacing:.04em;padding:12px 18px;border:1px solid var(--fg);background:transparent;color:var(--fg);cursor:pointer}
