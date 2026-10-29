@@ -43,6 +43,7 @@ h1 em{font-style:normal;color:var(--accent)}
 .mosaic .col{display:flex;flex-direction:column;gap:12px;animation:rise 45s linear infinite}
 .mosaic .col:nth-child(2){animation-duration:60s;animation-direction:reverse}
 .mosaic img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:top center;border:1px solid var(--line)}
+.mosaic img.left{object-position:left top}
 @keyframes rise{to{transform:translateY(calc(-50% - 6px))}}
 @media(max-width:800px){.hero-split{grid-template-columns:1fr}.mosaic{height:260px;padding:0 12px}}
 @media(prefers-reduced-motion:reduce){.mosaic .col{animation:none}}
