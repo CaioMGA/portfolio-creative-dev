@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caio · Programador Criativo</title>
+<meta name="description" content="Desenvolvedor web front-end e de games profissional desde setembro de 2017. Hoje trabalho com IA de forma criativa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="mono">
+    <span>caio / programador criativo</span>
+    <div><a href="#trilha">trilha</a><a href="#projetos">projetos</a><a href="#contato">contato</a></div>
+  </nav>
+
+  <header class="hero">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="hero-copy">
+      <span class="mono">Front-end · Games · IA</span>
+      <h1>Interfaces e jogos que <em>respondem</em>, agora com IA.</h1>
+      <p>Trabalho profissionalmente com desenvolvimento web front-end e de games desde setembro de 2017. Hoje uso IA como material criativo, não como atalho.</p>
+    </div>
+    <span class="mono hero-hint">mova o mouse ou toque</span>
+  </header>
+
+  <section class="numbers" aria-label="Em números">
+    <div><strong id="years">9</strong><span class="mono">anos de carreira profissional</span></div>
+    <div><strong>set/2017</strong><span class="mono">início como desenvolvedor</span></div>
+    <div><strong>2</strong><span class="mono">frentes: web e games</span></div>
+  </section>
+
+  <section id="trilha">
+    <span class="mono">Trilha</span>
+    <h2>Três disciplinas que se alimentam</h2>
+    <div class="tracks">
+      <article>
+        <span class="mono">desde 2017</span>
+        <h3>Web front-end</h3>
+        <p>Interfaces, animação, desempenho e acessibilidade. Do componente ao produto em produção.</p>
+        <ul class="tags"><li>HTML/CSS</li><li>JavaScript</li><li>TypeScript</li><li>Canvas/WebGL</li></ul>
+      </article>
+      <article>
+        <span class="mono">desde 2017</span>
+        <h3>Desenvolvimento de games</h3>
+        <p>Game feel, sistemas de jogo, UI e ferramentas, em projetos profissionais entregues.</p>
+        <ul class="tags"><li>Gameplay</li><li>UI de jogo</li><li>Ferramentas</li><li>[engines: preencher]</li></ul>
+      </article>
+      <article>
+        <span class="mono">agora</span>
+        <h3>IA criativa</h3>
+        <p>Agentes, geração e fluxos assistidos por IA aplicados a interfaces, jogos e experimentos visuais.</p>
+        <ul class="tags"><li>LLMs</li><li>Agentes</li><li>Geração procedural</li><li>Prototipagem</li></ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="projetos">
+    <span class="mono">Trabalhos selecionados</span>
+    <h2>Projetos</h2>
+    <p class="note mono">Espaços reservados. Preencha com seus projetos reais (nome, ano, papel, link).</p>
+    <div id="projects"></div>
+  </section>
+
+  <section id="contato">
+    <span class="mono">Contato</span>
+    <h2>Vamos criar algo juntos?</h2>
+    <div class="contact">
+      <button class="primary" id="copy" type="button">caiomga@gmail.com</button>
+      <span class="mono" id="msg" role="status">clique para copiar</span>
+    </div>
+  </section>
+
+  <footer class="mono">© <span id="year">2026</span> Caio · feito à mão</footer>
+</div>
+<script src="projects.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
