@@ -82,6 +82,11 @@
   // vai para a tela vizinha; subindo para uma tela alta, para no fim dela
   function go(dir) {
     var list = screens(), i = base(list) + dir;
+    // tela mais alta que a janela (trajetória no celular): rola por dentro dela antes de trocar de tela
+    if (!busy && inside(dir)) {
+      var r = list[i - dir].getBoundingClientRect(), step = innerHeight * .8;
+      return animate(scrollY + dir * Math.min(step, dir > 0 ? r.bottom - innerHeight : -r.top), i - dir);
+    }
     if (i < 0 || i >= list.length) return;
     var el = list[i], top = topOf(el);
     if (dir < 0 && el.offsetHeight > innerHeight + 2) top += el.offsetHeight - innerHeight;

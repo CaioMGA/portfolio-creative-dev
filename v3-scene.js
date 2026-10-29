@@ -446,7 +446,7 @@ function start() {
   };
   // elipse da órbita do hero; os objetos e a linha pontilhada usam a mesma
   const orbitPoint = (ang, out) => narrow
-    ? out.set(Math.cos(ang) * halfW * .62, halfH * .28 - Math.sin(ang) * 1.6, Math.sin(ang) * 1.6)
+    ? out.set(Math.cos(ang) * halfW * .55, halfH * .3 - Math.sin(ang) * 1.5, Math.sin(ang) * 1.4)
     : out.set(halfW * .5 + Math.cos(ang) * Math.min(halfW * .36, 3.3), -.1 - Math.sin(ang) * 1.5, Math.sin(ang) * 1.8);
   const clusterPos = (i, a, t, out) => {
     orbitPoint(a + i / n * Math.PI * 2, out);
@@ -479,8 +479,9 @@ function start() {
     pos.needsUpdate = true;
   }
   const ringPos = (i, a, out) => {
-    const ang = -a * .6 + i / n * Math.PI * 2, k = (CAM_Z + 2) / CAM_Z;
-    return out.set(Math.cos(ang) * halfW * .8 * k, Math.sin(ang) * halfH * .72 * k, -2);
+    // no celular o anel fica mais ao fundo (mais neblina) para não brigar com o texto do contato
+    const z = narrow ? -5 : -2, ang = -a * .6 + i / n * Math.PI * 2, k = (CAM_Z - z) / CAM_Z;
+    return out.set(Math.cos(ang) * halfW * .8 * k, Math.sin(ang) * halfH * .72 * k, z);
   };
   const focusPos = out => narrow ? out.set(0, halfH * .36, 0) : out.set(halfW * .48, 0, 0);
   const focusScale = () => narrow ? Math.min(1.25, halfW * .56) : Math.min(1.35, halfW * .26);
@@ -560,15 +561,16 @@ function start() {
     const k = 1 - Math.exp(-dt * (reduce ? 12 : 3.2));
     focusPos(f);
     let fs = focusScale();
-    const cs = narrow ? .55 : .72;
+    const cs = narrow ? .5 : .72;
     // celular: o objeto em foco ocupa o espaço livre entre o topo da tela e o card da estação
     if (narrow) {
       const best = weights.indexOf(Math.max(...weights));
       if (best >= 0 && weights[best] > 0) {
-        const top = Math.max(stations[best].firstChild.getBoundingClientRect().top, vh * .3);
-        const avail = top / vh * 2 * halfH;
-        f.y = halfH - avail / 2;
-        fs = Math.min(fs, avail * .8 / 2.6);
+        // 32 px de folga no topo, para o objeto não encostar na borda
+        const top = Math.max(stations[best].firstChild.getBoundingClientRect().top, vh * .3), pad = 32;
+        const avail = (top - pad) / vh * 2 * halfH;
+        f.y = halfH - pad / vh * 2 * halfH - avail / 2;
+        fs = Math.min(fs, avail * .78 / 2.6);
       }
     }
 
@@ -590,7 +592,7 @@ function start() {
       u.focus += (w - u.focus) * k;
       u.hover += ((hovered === h ? 1 : 0) - u.hover) * k * 1.5;
       let s = .9 + (cs - .9) * heroW;
-      s += (.6 - s) * contactW;
+      s += ((narrow ? .5 : .6) - s) * contactW;
       s += (fs - s) * w;
       s *= 1 + u.hover * .14;
       if (!loaded) s = .001; // os objetos crescem na órbita quando o loading sai
