@@ -374,45 +374,58 @@ function makeBooks() {
 // Academia Paulista de Letras: lâmpada de banqueiro (a da versão Estante do site). Clicar puxa a cordinha e acende ou apaga.
 // A luz é uma só, criada com a cena: mudar o número de luzes recompilaria todos os materiais; aqui só muda a intensidade.
 function makeLamp() {
-  const g = new THREE.Group();
+  const root = new THREE.Group();
+  const g = new THREE.Group(); root.add(g);
+  g.rotation.y = THREE.MathUtils.degToRad(12); // girada 12° em y, para não ficar chapada de frente
   const brass = mat(0xc9a45c, { metalness: 1, roughness: .3 });
   const dark = mat(0x2a2118, { roughness: .5 });
+  const SHADE_Y = .33, BULB_Y = .36, BULB_R = .13, BULB_HALF = .475, SHADE_R = .44, SHADE_HALF = .75;
+
   const base = cyl(.55, .14, brass, 48); base.position.y = -1; g.add(base);
   const step = cyl(.4, .1, brass, 48); step.position.y = -.88; g.add(step);
-  const stem = cyl(.06, 1.45, brass, 20); stem.position.y = -.15; g.add(stem);
+  const stem = cyl(.06, 1.03, brass, 20); stem.position.y = -.315; g.add(stem); // do degrau até a base da lâmpada
   const collar = cyl(.1, .1, brass, 20); collar.position.y = -.55; g.add(collar);
-  const knob = new THREE.Mesh(new THREE.SphereGeometry(.1, 20, 14), brass); knob.position.y = .58; g.add(knob);
+  const joint = new THREE.Mesh(new THREE.SphereGeometry(.09, 20, 14), brass); joint.position.y = .2; g.add(joint);
+  const bracket = cyl(.035, .32, brass, 12); bracket.position.y = .36; g.add(bracket); // sobe por dentro da lâmpada até a cúpula
 
-  // cúpula: meio cilindro verde, aberto embaixo e nas pontas
+  // cúpula: meio cilindro verde, baixa o bastante para cobrir a lâmpada, com as duas laterais fechadas
   const shadeMat = new THREE.MeshStandardMaterial({ color: 0x1d7a4c, roughness: .25, metalness: .1, side: THREE.DoubleSide, emissive: 0x3fbf7a, emissiveIntensity: 0 });
-  const shade = new THREE.Mesh(new THREE.CylinderGeometry(.44, .44, 1.5, 40, 1, true, 0, Math.PI), shadeMat);
-  shade.rotation.z = Math.PI / 2; shade.position.y = .62; g.add(shade);
-  [-.75, .75].forEach(x => {
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(.44, .02, 8, 40, Math.PI), brass);
-    rim.rotation.y = Math.PI / 2; rim.position.set(x, .62, 0); g.add(rim);
+  const shade = new THREE.Mesh(new THREE.CylinderGeometry(SHADE_R, SHADE_R, SHADE_HALF * 2, 40, 1, true, 0, Math.PI), shadeMat);
+  shade.rotation.z = Math.PI / 2; shade.position.y = SHADE_Y; g.add(shade);
+  [-SHADE_HALF, SHADE_HALF].forEach(x => {
+    const side = new THREE.Mesh(new THREE.CircleGeometry(SHADE_R, 40, 0, Math.PI), shadeMat);
+    side.rotation.y = Math.PI / 2; side.position.set(x, SHADE_Y, 0); g.add(side);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(SHADE_R, .02, 8, 40, Math.PI), brass);
+    rim.rotation.y = Math.PI / 2; rim.position.set(x, SHADE_Y, 0); g.add(rim);
   });
 
-  // lâmpada (emissiva) e a luz
+  // lâmpada: o cilindro branco, com tampas de latão nas pontas; a luz e o brilho ficam no centro dele
   const bulbMat = new THREE.MeshStandardMaterial({ color: 0xffe6b0, roughness: .4, emissive: 0xffb84d, emissiveIntensity: 0 });
-  const bulb = cyl(.1, .95, bulbMat, 20); bulb.rotation.z = Math.PI / 2; bulb.position.y = .52; g.add(bulb);
-  const light = new THREE.PointLight(0xffc477, 0, 7, 2); light.position.set(0, .45, 0); g.add(light);
+  const bulb = cyl(BULB_R, BULB_HALF * 2, bulbMat, 24); bulb.rotation.z = Math.PI / 2; bulb.position.y = BULB_Y; g.add(bulb);
+  const CAP_X = BULB_HALF + .02;
+  [-CAP_X, CAP_X].forEach(x => {
+    const cap = cyl(BULB_R + .01, .04, brass, 24); cap.rotation.z = Math.PI / 2; cap.position.set(x, BULB_Y, 0); g.add(cap);
+  });
+  const light = new THREE.PointLight(0xffc477, 0, 7, 2); light.position.set(0, BULB_Y - .1, 0); g.add(light);
   const glowTex = canvasTex(128, 128, (x, w) => {
     const r = x.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2);
     r.addColorStop(0, 'rgba(255,200,120,.9)'); r.addColorStop(.35, 'rgba(255,170,80,.28)'); r.addColorStop(1, 'rgba(255,150,60,0)');
     x.fillStyle = r; x.fillRect(0, 0, w, w);
   });
   const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0, fog: false }));
-  glow.scale.setScalar(1.9); glow.position.set(0, .3, .25); glow.raycast = () => {}; g.add(glow);
+  glow.scale.set(1.6, 1, 1); glow.position.set(0, BULB_Y, .3); glow.raycast = () => {}; g.add(glow); // elipse no comprimento do cilindro
 
-  // cordinha com argola, pendurada na ponta da cúpula
-  const pull = new THREE.Group(); pull.position.set(.6, .52, 0); g.add(pull);
-  const cord = cyl(.012, .9, dark, 8); cord.position.y = -.45; pull.add(cord);
-  const bead = new THREE.Mesh(new THREE.SphereGeometry(.06, 16, 12), brass); bead.position.y = -.92; pull.add(bead);
+  // cordinha presa na tampa de latão da ponta direita; ao puxar ela estica, a ponta de cima não sai do lugar
+  const CORD = .9;
+  const pull = new THREE.Group(); pull.position.set(CAP_X, BULB_Y - BULB_R - .01, 0); g.add(pull);
+  const eye = new THREE.Mesh(new THREE.SphereGeometry(.03, 12, 10), brass); pull.add(eye);
+  const cord = cyl(.012, 1, dark, 8); pull.add(cord);
+  const bead = new THREE.Mesh(new THREE.SphereGeometry(.06, 16, 12), brass); pull.add(bead);
 
   const st = { on: true, level: 1, pull: 0 };
-  g.userData.tip = 'lampTip';
-  g.userData.onClick = () => { st.on = !st.on; st.pull = 1; };
-  g.userData.tick = (t, dt, f) => {
+  root.userData.tip = 'lampTip';
+  root.userData.onClick = () => { st.on = !st.on; st.pull = 1; };
+  root.userData.tick = (t, dt, f) => {
     st.level += ((st.on ? 1 : 0) - st.level) * (1 - Math.exp(-dt * 9));
     st.pull *= Math.exp(-dt * 7);
     const L = st.level;
@@ -421,9 +434,10 @@ function makeLamp() {
     bulbMat.emissiveIntensity = L * 2.2;
     shadeMat.emissiveIntensity = L * .35;
     glow.material.opacity = L * (.35 + .5 * f);
-    pull.position.y = .52 - st.pull * .14;
+    const len = CORD * (1 + st.pull * .2);
+    cord.scale.y = len; cord.position.y = -len / 2; bead.position.y = -len - .02;
   };
-  return g;
+  return root;
 }
 
 const MAKERS = {
