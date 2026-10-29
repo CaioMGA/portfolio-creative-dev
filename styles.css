@@ -81,6 +81,7 @@ h3{font:500 1.35rem/1.15 var(--display);margin:0}
 
 .tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
 .tracks article{background:var(--bg);padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.tracks.five{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
 .tracks p{margin:0;color:var(--muted);font-size:15.5px}
 .tags{list-style:none;margin:auto 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .tags li{font:400 12px var(--mono);border:1px solid var(--line);padding:3px 8px}
