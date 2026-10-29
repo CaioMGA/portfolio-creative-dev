@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caio Amaral · Desenvolvedor de Games</title>
+<meta name="description" content="Desenvolvedor de games desde 2017. Jogos 2D e 3D, simuladores e serious games, e projetos criativos feitos com IA em dias.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <nav class="mono">
+    <span>caio amaral / desenvolvedor de games</span>
+    <div><a href="#ia">com ia</a><a href="#games">games</a><a href="#metodo">como trabalho</a><a href="#trilha">trajetória</a><a href="#contato">contato</a></div>
+  </nav>
+
+  <header class="hero">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="hero-copy">
+      <span class="mono">IA aplicada · Desenvolvedor de games</span>
+      <h1>Faço jogos desde 2017. Com IA, entrego em <em>dias</em> o que levava meses.</h1>
+      <p>Trabalhei em jogos 2D e 3D, simuladores e serious games para Android, iOS e web. Hoje uso IA da pré-produção ao handoff e reviso cada linha que ela escreve.</p>
+    </div>
+    <span class="mono hero-hint">mova o mouse ou toque</span>
+  </header>
+
+  <section class="numbers" aria-label="Em números">
+    <div><strong>9 dias</strong><span class="mono">para construir a plataforma BRCHAD Games</span></div>
+    <div><strong>200+</strong><span class="mono">cruzadinhas publicadas no acervo</span></div>
+    <div><strong id="years">9+</strong><span class="mono">anos desenvolvendo games</span></div>
+  </section>
+
+  <section id="ia">
+    <span class="mono">Criado com IA</span>
+    <h2>Projetos criativos que saíram do papel</h2>
+    <p class="lead">Ideias que antes não valiam o esforço. Com IA, viraram produtos no ar, alguns em poucos dias.</p>
+    <div id="projects"></div>
+  </section>
+
+  <section id="games">
+    <span class="mono">Experiência em games</span>
+    <h2>A base: jogos desde 2017</h2>
+    <p class="lead">Antes da IA, foram anos fazendo jogos 2D e 3D, simuladores e serious games para marcas, empresas e estúdios. É essa experiência que me diz o que aceitar do que a IA escreve. Estes são alguns deles.</p>
+    <!-- remover quando os cards de games.js estiverem preenchidos -->
+    <p class="draft-note mono">Rascunho: os cards abaixo esperam os dados dos jogos em games.js.</p>
+    <div class="game-list" id="game-list"></div>
+    <div class="groups">
+      <div>
+        <h3>Também trabalhei com</h3>
+        <ul class="tags">
+          <li>Jogos 2D e 3D</li><li>Jogos licenciados (IPs de terceiros)</li><li>Serious games e simuladores</li><li>Apps interativos: onboarding, eventos, streaming</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Plataformas</h3>
+        <ul class="tags"><li>Android</li><li>iOS</li><li>Web (WebGL/HTML5)</li></ul>
+      </div>
+      <div>
+        <h3>Tecnologias</h3>
+        <ul class="tags"><li>Unity</li><li>Godot</li><li>JavaScript</li><li>three.js</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="metodo">
+    <span class="mono">Como trabalho com IA</span>
+    <h2>A IA escreve, eu decido</h2>
+    <ol class="phases">
+      <li><span class="mono">01 · pré-produção</span><h3>Ideia clara</h3><p>Escrevo a ideia e as regras com clareza, porque instrução boa gera código bom.</p></li>
+      <li><span class="mono">02 · protótipo</span><h3>Testar rápido</h3><p>Testo várias versões em horas, não em semanas, e jogo cada uma. Penso no que o jogador sente, não só no que roda.</p></li>
+      <li><span class="mono">03 · revisão</span><h3>Ler cada linha</h3><p>Leio o que a IA escreve. 15 anos de software me dizem o que aceitar e o que refazer.</p></li>
+      <li><span class="mono">04 · handoff</span><h3>Código que dura</h3><p>Entrego código documentado, que outra pessoa consegue manter.</p></li>
+    </ol>
+  </section>
+
+  <section id="trilha">
+    <span class="mono">Trajetória</span>
+    <h2>Do front-end aos games e à IA</h2>
+    <div class="tracks">
+      <article>
+        <span class="mono">antes</span>
+        <h3>Web front-end</h3>
+        <p>Comecei fazendo interfaces para a web.</p>
+      </article>
+      <article>
+        <span class="mono">desde 2017</span>
+        <h3>Games</h3>
+        <p>Desenvolvedor profissional de games, de jogos 2D e 3D a simuladores e serious games.</p>
+      </article>
+      <article>
+        <span class="mono">desde 2024</span>
+        <h3>IA</h3>
+        <p>Uso IA no desenvolvimento desde 2024. Em 2026 me especializei em desenvolvimento assistido por IA, da pré-produção ao handoff.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="contato">
+    <span class="mono">Contato</span>
+    <h2>Tem um jogo ou uma ideia para tirar do papel? Me conta.</h2>
+    <div class="contact">
+      <button class="primary" id="copy" type="button">caiomga@gmail.com</button>
+      <span class="mono" id="msg" role="status">clique para copiar</span>
+      <a class="btn" href="https://devcriativo.substack.com/" target="_blank" rel="noopener noreferrer">Newsletter ↗</a>
+    </div>
+  </section>
+
+  <footer class="mono">© <span id="year">2026</span> Caio Amaral · feito com IA</footer>
+</div>
+<script src="games.js"></script>
+<script src="projects-v2.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

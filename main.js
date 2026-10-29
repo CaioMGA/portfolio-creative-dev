@@ -25,6 +25,29 @@
     list.append(a);
   });
 
+  // cards de games (só em v2.html)
+  var games = document.getElementById('game-list');
+  if (games) (window.GAMES || []).forEach(function (g) {
+    var card = document.createElement(g.href ? 'a' : 'article');
+    card.className = 'game' + (g.todo ? ' todo' : '');
+    if (g.href) { card.href = g.href; card.target = '_blank'; card.rel = 'noopener noreferrer'; }
+    var fig = document.createElement('figure');
+    if (g.img) {
+      var img = document.createElement('img');
+      img.src = g.img; img.alt = g.alt || g.title; img.loading = 'lazy';
+      fig.append(img);
+    } else {
+      fig.innerHTML = '<span class="mono">imagem do jogo</span>';
+    }
+    var meta = document.createElement('span'); meta.className = 'mono'; meta.textContent = g.meta;
+    var h = document.createElement('h3'); h.textContent = g.title;
+    var role = document.createElement('p'); role.textContent = g.role;
+    var ch = document.createElement('p'); ch.textContent = g.challenge;
+    var res = document.createElement('strong'); res.className = 'result'; res.textContent = g.result;
+    card.append(fig, meta, h, role, ch, res);
+    games.append(card);
+  });
+
   var cv = document.getElementById('field'), ctx = cv.getContext('2d');
   var chars = ' .:-=+*#%@', cell = 14, cols, rows, w, h, mx = -1e3, my = -1e3, t = 0, fill = '#888';
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
