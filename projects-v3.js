@@ -11,3 +11,14 @@ window.PROJECTS.splice(1, 0, {
 });
 // Mixtape fica fora da v3 (continua na v2); remover também a entrada de PROJECTS_EN em v3-i18n.js
 window.PROJECTS = window.PROJECTS.filter(function (p) { return p.title !== "Mixtape"; });
+
+// Logline de tempo gasto (PT); a versão em inglês está em PROJECTS_EN (v3-i18n.js).
+var TIMES = {
+  "BRCHAD Games": "feito em 9 dias",
+  "Academia Paulista de Letras: proposta de novo site": "feito em 8 horas · 2 variações",
+  "the stained hanes show 24/7 unstoppable stream": "feito em 10 horas",
+  "First of October Radio": "feito em 3 dias",
+  "Caio's Clocks": "cada relógio em 1 a 8 horas",
+  "Tomos do blog": "feito em 50 minutos",
+};
+window.PROJECTS.forEach(function (p) { p.time = TIMES[p.title]; });

@@ -19,6 +19,7 @@
     n.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(all.length).padStart(2, '0');
     count.append(tag, n);
     var h = document.createElement('h3');
+    var tm = document.createElement('span'); tm.className = 'mono time';
     var d = document.createElement('p');
     var fig = document.createElement('figure');
     var img = document.createElement('img');
@@ -29,10 +30,10 @@
     a.target = '_blank'; a.rel = 'noopener noreferrer';
     fills.push(function () {
       var x = text(i);
-      tag.textContent = x.tag; h.textContent = x.title; d.textContent = x.desc;
+      tag.textContent = x.tag; h.textContent = x.title; tm.textContent = x.time || ''; d.textContent = x.desc;
       img.alt = x.alt || x.title; a.textContent = x.tag + ' ↗';
     });
-    card.append(count, h, d, fig, a);
+    card.append(count, h, tm, d, fig, a);
     st.append(card);
     list.append(st);
   });

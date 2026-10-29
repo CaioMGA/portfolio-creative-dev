@@ -45,6 +45,8 @@
     conTitle: 'Got a game or an idea to get off the ground? Tell me.',
     copyHint: 'click to copy',
     made: 'made with AI',
+    code: 'Code on GitHub ↗',
+    built8: 'This site was designed and coded in less than 8 hours',
     top: 'Back to top ↑',
   };
   // textos escritos pelo JS (cópia do e-mail, tooltip da cena, etiqueta da fita)
@@ -54,22 +56,22 @@
   };
   // mesma ordem de PROJECTS (projects-v2.js + projects-v3.js): o índice casa os textos
   var PROJECTS_EN = [
-    { title: 'BRCHAD Games', tag: 'Learn More',
+    { title: 'BRCHAD Games', time: 'made in 9 days', tag: 'Learn More',
       desc: 'A complete platform for puzzle games: editors, an archive of 200+ crosswords, a publishing server, an embeddable player, analytics and a dashboard. I built it with AI and integrated it into Cruzadinha.com.br in the same timeframe.',
       alt: 'BRChad Games Admin game schedule: stats, filters by type and period, and a calendar of scheduled games.' },
-    { title: 'Academia Paulista de Letras: new institutional website proposal', tag: 'See Live Demo',
+    { title: 'Academia Paulista de Letras: new institutional website proposal', time: 'made in 8 hours · 2 variations', tag: 'See Live Demo',
       desc: 'An independent prototype of a new website for the APL (the São Paulo Academy of Letters). With AI, I built two design proposals in 8 hours, Estante and Clássica, both fully implemented: real content from the 40 chairs and the academicians, 80 AI-written biographies to supplement the site, and an editing panel with roles for the staff and the academicians (in the full version).',
       alt: 'Home of the prototype’s Estante version: a news carousel over an ornamental background and the banner saying this is not the Academy’s official site.' },
-    { title: 'the stained hanes show 24/7 unstoppable stream', tag: '24/7 Streaming',
+    { title: 'the stained hanes show 24/7 unstoppable stream', time: 'made in 10 hours', tag: '24/7 Streaming',
       desc: 'A site that streams the stained hanes show 24 hours a day. Everyone watches the same episode at the same second, on a 3D TV built with three.js. The whole site was made with AI, and the episode quotes were extracted with AI.',
       alt: 'the stained hanes show on air: the 3D TV playing episode S01E01, next to the episode’s quotes panel.' },
-    { title: 'First of October Radio', tag: '24/7 Radio',
+    { title: 'First of October Radio', time: 'made in 3 days', tag: '24/7 Radio',
       desc: 'A 24/7 radio with no backend, built on YouTube videos. The site’s algorithm controls playback: whoever tunes in hears the same song, at the same second, as every other listener.',
       alt: 'First of October Radio artwork: red signal circles on a dark background.' },
-    { title: "Caio's Clocks", tag: 'See the Clocks',
+    { title: "Caio's Clocks", time: 'each clock in 1 to 8 hours', tag: 'See the Clocks',
       desc: 'One new creative-coding clock at a time, between 2025 and 2026. Each one tests a different visual idea.',
       alt: "Clock 17 from Caio's Clocks: a game board with cards, a die and a pawn." },
-    { title: 'Blog tomes', tag: 'Automating the boring part',
+    { title: 'Blog tomes', time: 'made in 50 minutes', tag: 'Automating the boring part',
       desc: 'I automated compiling my daily posts into books. Each tome took 3 to 4 days of manual work; now it takes 2 to 5 minutes, and the time saved goes back into writing.',
       alt: 'Mascot of the Desenvolvedor Criativo newsletter: a blue 3D fish.' },
   ];
