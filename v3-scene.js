@@ -417,7 +417,7 @@ function start() {
     const h = new THREE.Group();
     h.add(obj);
     h.scale.setScalar(.001);
-    h.userData = { i, title: p.title, tag: p.tag, tick: obj.userData.tick, yaw: 0, pitch: 0, spin: 0, spinTo: 0, hover: 0, focus: 0 };
+    h.userData = { i, title: p.title, tag: p.tag, tick: obj.userData.tick, yaw: 0, pitch: 0, spin: 0, spinFrom: 0, spinTo: 0, spinT: 1, hover: 0, focus: 0, shown: false };
     scene.add(h);
     return h;
   });
@@ -502,9 +502,17 @@ function start() {
     const h = pick();
     if (!h) return;
     const u = h.userData;
-    if (u.focus > .5) u.spinTo += Math.PI * 2; // o objeto em foco dá uma volta
+    if (u.focus > .5) spin(u); // o objeto em foco dá uma volta
     else if (stations[u.i]) window.goTo ? window.goTo(stations[u.i]) : stations[u.i].scrollIntoView({ block: 'start' });
   });
+  // giro de 360° com duração fixa; se pedir outro no meio, emenda a partir de onde está
+  const SPIN_DUR = 1.2;
+  function spin(u) {
+    if (reduce) return;
+    u.spinFrom = u.spin;
+    u.spinTo += Math.PI * 2;
+    u.spinT = 0;
+  }
   function pick() {
     ray.setFromCamera(pointer.ndc, camera);
     const hit = ray.intersectObjects(holders, true)[0];
@@ -585,7 +593,11 @@ function start() {
       const focPitch = -pointer.y * .3 + .1;
       u.yaw += (idleYaw + (focYaw - idleYaw) * w - u.yaw) * k;
       u.pitch += (idlePitch + (focPitch - idlePitch) * w - u.pitch) * k;
-      u.spin += (u.spinTo - u.spin) * (1 - Math.exp(-dt * 2.5));
+      // a estação entrou na tela: o objeto dá uma volta para pontuar a transição
+      if (w > .5 && !u.shown) { u.shown = true; spin(u); }
+      if (w < .2) u.shown = false;
+      u.spinT = Math.min(1, u.spinT + dt / SPIN_DUR);
+      u.spin = u.spinFrom + (u.spinTo - u.spinFrom) * easeInOut(u.spinT);
       h.rotation.set(u.pitch, u.yaw + u.spin, 0);
       u.tick?.(t, dt, Math.max(u.focus, u.hover * .6));
     });
