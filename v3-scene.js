@@ -273,7 +273,6 @@ function makeClock() {
     }
     x.font = `500 18px ${MONO}`; x.fillStyle = '#566074';
     x.fillText("CAIO'S CLOCKS", c, c - 70);
-    x.fillText('Nº 18', c, c + 74);
   });
   const dial = new THREE.Mesh(new THREE.CircleGeometry(1.06, 64), new THREE.MeshStandardMaterial({ map: face, roughness: .6 }));
   dial.position.z = .101; g.add(dial);
@@ -512,7 +511,8 @@ function start() {
     }
     tip.classList.toggle('on', !!hovered);
 
-    orbitSpeed += ((hovered || reduce ? 0 : .12) - orbitSpeed) * (1 - Math.exp(-dt * 3));
+    // para quase na hora sob o ponteiro (para dar para clicar) e retoma devagar
+    orbitSpeed += ((hovered || reduce ? 0 : .12) - orbitSpeed) * (1 - Math.exp(-dt * (hovered ? 14 : 1.5)));
     orbit += orbitSpeed * dt;
     const k = 1 - Math.exp(-dt * (reduce ? 12 : 3.2));
     focusPos(f);

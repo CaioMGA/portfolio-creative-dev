@@ -32,7 +32,7 @@ a{color:inherit}
 #tip.on{opacity:1}
 
 /* tudo que é "vazio" deixa o ponteiro chegar ao canvas */
-.hero,section,.station,#stations{pointer-events:none}
+.wrap,.hero,section,.station,#stations{pointer-events:none}
 nav,.hero-copy,.panel,.card,.more,footer{pointer-events:auto}
 body.hovering{cursor:pointer}
 
