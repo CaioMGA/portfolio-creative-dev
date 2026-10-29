@@ -151,4 +151,9 @@ footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content
   .card figure{display:none}
   .no-gl .card figure{display:block}
 }
+/* desktop com janela baixa: o card mais alto (APL, 715 px com o print) não cabe entre o menu e os botões fixos */
+@media(min-width:801px) and (max-height:860px){
+  .card figure{display:none}
+  .no-gl .card figure{display:block}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}
