@@ -364,7 +364,7 @@ function makeLamp() {
   glow.scale.set(1.6, 1, 1); glow.position.set(0, BULB_Y, .3); glow.raycast = () => {}; g.add(glow); // elipse no comprimento do cilindro
 
   // cordinha presa na tampa de latão da ponta direita; ao puxar ela estica, a ponta de cima não sai do lugar
-  const CORD = .9;
+  const CORD = .6;
   const pull = new THREE.Group(); pull.position.set(CAP_X, BULB_Y - BULB_R - .01, 0); g.add(pull);
   const eye = new THREE.Mesh(new THREE.SphereGeometry(.03, 12, 10), brass); pull.add(eye);
   const cord = cyl(.012, 1, dark, 8); pull.add(cord);

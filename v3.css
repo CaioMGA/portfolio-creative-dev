@@ -123,6 +123,10 @@ button.primary:hover{filter:brightness(1.1)}
 .pager button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .pager button:disabled{opacity:.3;cursor:default}
 .no-gl .pager{display:none}
+/* Voltar ao topo: fixo no canto inferior direito, alinhado à coluna do conteúdo; some no hero */
+#top{position:fixed;z-index:3;bottom:16px;right:max(16px,calc((100vw - 1180px) / 2));padding:10px 14px;font-size:13px;white-space:nowrap;
+  transition:opacity .3s,visibility .3s,background .15s,color .15s;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+html.at-hero #top,html.loading #top{opacity:0;visibility:hidden;pointer-events:none}
 footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .no-gl footer{position:static;margin-top:72px}
 
@@ -133,6 +137,9 @@ footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content
   .hint{display:none}
   .station{align-items:flex-end;padding-bottom:calc(6svh + 52px)}
   .pager{bottom:12px}
+  /* só a seta, para não bater nos botões Anterior/Próximo; o texto continua no DOM para leitores de tela */
+  #top{bottom:12px;right:12px;font-size:0;padding:10px 14px}
+  #top::before{content:"↑";font-size:16px;line-height:1}
   footer{bottom:68px}
   /* menu numa linha só, abaixo do nome */
   nav.mono{font-size:11px;letter-spacing:.04em;padding-block:14px;gap:6px}

@@ -115,6 +115,11 @@
     return dir > 0 ? r.bottom > innerHeight + 2 : r.top < -2;
   }
   window.goTo = function (el) { animate(topOf(el), screens().indexOf(el)); };
+  // Voltar ao topo aparece em todas as telas, menos no hero
+  function markHero() { root.classList.toggle('at-hero', scrollY < innerHeight * .5); }
+  addEventListener('scroll', markHero, { passive: true });
+  addEventListener('resize', markHero);
+  markHero();
   prev.addEventListener('click', function () { go(-1); });
   next.addEventListener('click', function () { go(1); });
   addEventListener('scroll', function () { if (!busy) sync(); }, { passive: true });
