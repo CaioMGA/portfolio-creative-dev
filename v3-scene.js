@@ -32,10 +32,11 @@ function canvasTex(w, h, draw) {
 
 // ---------- objetos ----------
 
-// BRCHAD Games: uma cruzadinha 5x5 em cubos (CAIO, CRIAR, IDEIA nos dois sentidos, GAME)
+// BRCHAD Games: uma cruzadinha 5x5 em cubos (CAIO, CRIAR, IDEIA, GAME); o IDEIA vertical está por preencher
+// '#' é casa preta, '.' é casa branca sem letra
 function makeGrid() {
   const g = new THREE.Group();
-  const rows = ['CAIO#', 'R#D#G', 'IDEIA', 'A#I#M', 'R#A#E'];
+  const rows = ['CAIO#', 'R#.#G', 'IDEIA', 'A#.#M', 'R#.#E'];
   const clues = { '0,0': 1, '0,2': 2, '1,4': 3, '2,0': 4 };
   const s = .42, step = .47;
   const cubeGeo = new RoundedBoxGeometry(s, s, s, 3, .05);
@@ -48,7 +49,7 @@ function makeGrid() {
     cell.position.set((c - 2) * step, (2 - r) * step, 0);
     const blank = ch === '#';
     cell.add(new THREE.Mesh(cubeGeo, blank ? black : white));
-    if (!blank) {
+    if (!blank && ch !== '.') {
       const map = canvasTex(128, 128, (x, w) => {
         x.fillStyle = '#12141a';
         x.font = `800 82px ${DISPLAY}`;
