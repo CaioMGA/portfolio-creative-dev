@@ -536,9 +536,12 @@ function start() {
     const heroW = smooth(.35, .85, hero.getBoundingClientRect().bottom / vh);
     const cr = contact.getBoundingClientRect();
     const contactW = 1 - smooth(.2, .9, Math.abs((cr.top + cr.height / 2 - vh / 2) / vh));
-    const weights = stations.map(st => {
+    const centered = [];
+    const weights = stations.map((st, i) => {
       const r = st.getBoundingClientRect();
-      const w = 1 - smooth(.3, .62, Math.abs((r.top + r.height / 2 - vh / 2) / vh));
+      const off = Math.abs((r.top + r.height / 2 - vh / 2) / vh);
+      centered[i] = off < .02; // a rolagem até a estação terminou
+      const w = 1 - smooth(.3, .62, off);
       st.classList.toggle('active', w > .5);
       return w;
     });
@@ -578,14 +581,16 @@ function start() {
       const u = h.userData, w = weights[i] || 0;
       bgPos(i, t, a); clusterPos(i, orbit, t, b); ringPos(i, orbit, c);
       tmp.copy(a).lerp(b, heroW).lerp(c, contactW).lerp(f, w);
-      h.position.lerp(tmp, k);
+      // o objeto em foco chega mais firme, para assentar logo e poder girar
+      const kf = reduce ? k : 1 - Math.exp(-dt * (3.2 + 3.3 * w));
+      h.position.lerp(tmp, kf);
       u.focus += (w - u.focus) * k;
       u.hover += ((hovered === h ? 1 : 0) - u.hover) * k * 1.5;
       let s = .9 + (cs - .9) * heroW;
       s += (.6 - s) * contactW;
       s += (fs - s) * w;
       s *= 1 + u.hover * .14;
-      h.scale.setScalar(h.scale.x + (s - h.scale.x) * k);
+      h.scale.setScalar(h.scale.x + (s - h.scale.x) * kf);
 
       // em foco o objeto encara a câmera e segue o ponteiro; fora dele balança sozinho
       const idleYaw = Math.sin(t * .3 + i * 1.7) * .6 + pointer.x * .4;
@@ -594,8 +599,8 @@ function start() {
       const focPitch = -pointer.y * .3 + .1;
       u.yaw += (idleYaw + (focYaw - idleYaw) * w - u.yaw) * k;
       u.pitch += (idlePitch + (focPitch - idlePitch) * w - u.pitch) * k;
-      // a estação entrou na tela: o objeto dá uma volta para pontuar a transição
-      if (w > .5 && !u.shown) { u.shown = true; spin(u); }
+      // a estação entrou na tela: quando o objeto assenta na posição e na escala do foco, dá uma volta
+      if (centered[i] && !u.shown && h.position.distanceTo(tmp) < .06 && Math.abs(h.scale.x - s) < s * .02) { u.shown = true; spin(u); }
       if (w < .2) u.shown = false;
       u.spinT = Math.min(1, u.spinT + dt / SPIN_DUR);
       u.spin = u.spinFrom + (u.spinTo - u.spinFrom) * easeInOut(u.spinT);
