@@ -2,7 +2,7 @@
   var START = new Date(2017, 8, 1); // setembro de 2017
   var now = new Date();
   var years = Math.floor((now - START) / (365.25 * 24 * 3600 * 1000));
-  document.getElementById('years').textContent = years;
+  document.getElementById('years').textContent = years + '+';
   document.getElementById('year').textContent = now.getFullYear();
 
   var list = document.getElementById('projects');
