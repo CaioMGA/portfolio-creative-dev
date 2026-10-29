@@ -68,7 +68,7 @@ nav .lang{gap:2px}
 h1{font:800 clamp(2.4rem,5.6vw,4.6rem)/.98 var(--display);letter-spacing:-.03em;margin:0 0 22px;text-wrap:balance}
 h1 em{font-style:normal;color:var(--accent)}
 .hero-copy p{max-width:44ch;margin:0;font-size:1.1rem}
-.hint{position:absolute;left:0;bottom:76px}
+.hint{position:absolute;left:0;bottom:92px}
 .no-gl .hint{display:none}
 
 section{position:relative;padding-block:96px 0}
@@ -120,13 +120,13 @@ button{font:500 14px var(--mono);letter-spacing:.04em;padding:12px 18px;border:1
 button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
 button.primary:hover{filter:brightness(1.1)}
 /* Anterior / Próximo: fixos no centro da base, por cima da cena */
-.pager{position:fixed;z-index:3;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px}
+.pager{position:fixed;z-index:3;left:50%;bottom:32px;transform:translateX(-50%);display:flex;gap:8px}
 .pager button{padding:10px 14px;font-size:13px;white-space:nowrap;background:var(--glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .pager button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .pager button:disabled{opacity:.3;cursor:default}
 .no-gl .pager{display:none}
 /* Voltar ao topo: fixo no canto inferior direito, alinhado à coluna do conteúdo; some no hero */
-#top{position:fixed;z-index:3;bottom:16px;right:max(16px,calc((100vw - 1180px) / 2));padding:10px 14px;font-size:13px;white-space:nowrap;
+#top{position:fixed;z-index:3;bottom:32px;right:max(16px,calc((100vw - 1180px) / 2));padding:10px 14px;font-size:13px;white-space:nowrap;
   transition:opacity .3s,visibility .3s,background .15s,color .15s;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 html.at-hero #top,html.loading #top{opacity:0;visibility:hidden;pointer-events:none}
 footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -134,15 +134,15 @@ footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content
 
 /* celular: objeto 3D na metade de cima, texto embaixo */
 @media(max-width:800px){
-  .hero{justify-content:flex-end;padding-bottom:112px}
+  .hero{justify-content:flex-end;padding-bottom:128px}
   .hero-copy{max-width:none}
   .hint{display:none}
-  .station{align-items:flex-end;padding-bottom:calc(6svh + 52px)}
-  .pager{bottom:12px}
+  .station{align-items:flex-end;padding-bottom:calc(6svh + 68px)}
+  .pager{bottom:calc(28px + env(safe-area-inset-bottom,0px))}
   /* só a seta, para não bater nos botões Anterior/Próximo; o texto continua no DOM para leitores de tela */
-  #top{bottom:12px;right:12px;font-size:0;padding:10px 14px}
+  #top{bottom:calc(28px + env(safe-area-inset-bottom,0px));right:12px;font-size:0;padding:10px 14px}
   #top::before{content:"↑";font-size:16px;line-height:1}
-  footer{bottom:68px}
+  footer{bottom:84px}
   /* menu numa linha só, abaixo do nome */
   nav.mono{font-size:11px;letter-spacing:.04em;padding-block:14px;gap:6px}
   nav div{gap:14px}
