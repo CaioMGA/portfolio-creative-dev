@@ -395,10 +395,12 @@ function start() {
   const rim = new THREE.DirectionalLight(0xffffff, 1.4); rim.position.set(-6, 3, -5); scene.add(rim);
 
   // a neblina tem a cor do fundo da página, então os objetos do fundo "somem" nela
+  const dotColor = new THREE.Color(), tmpDot = new THREE.Vector3();
   function readTheme() {
     const css = getComputedStyle(root);
     scene.fog.color.set(css.getPropertyValue('--bg').trim());
     rim.color.set(css.getPropertyValue('--accent').trim());
+    dotColor.set(css.getPropertyValue('--muted').trim());
   }
   readTheme();
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readTheme);
@@ -441,11 +443,40 @@ function start() {
     const [nx, ny, z] = BG[i % BG.length], k = (CAM_Z - z) / CAM_Z;
     return out.set(nx * halfW * k, ny * halfH * k + Math.sin(t * .4 + i) * .4, z);
   };
+  // elipse da órbita do hero; os objetos e a linha pontilhada usam a mesma
+  const orbitPoint = (ang, out) => narrow
+    ? out.set(Math.cos(ang) * halfW * .62, halfH * .28 - Math.sin(ang) * 1.6, Math.sin(ang) * 1.6)
+    : out.set(halfW * .5 + Math.cos(ang) * Math.min(halfW * .36, 3.3), -.1 - Math.sin(ang) * 1.5, Math.sin(ang) * 1.8);
   const clusterPos = (i, a, t, out) => {
-    const ang = a + i / n * Math.PI * 2;
-    if (narrow) return out.set(Math.cos(ang) * halfW * .62, halfH * .28 - Math.sin(ang) * 1.6 + Math.sin(t + i) * .1, Math.sin(ang) * 1.6);
-    return out.set(halfW * .5 + Math.cos(ang) * Math.min(halfW * .36, 3.3), -.1 - Math.sin(ang) * 1.5 + Math.sin(t + i) * .12, Math.sin(ang) * 1.8);
+    orbitPoint(a + i / n * Math.PI * 2, out);
+    out.y += Math.sin(t + i) * (narrow ? .1 : .12);
+    return out;
   };
+
+  // linha pontilhada da órbita: pontos redondos que andam junto com os objetos e somem fora do hero
+  const DOTS = 160;
+  const dotsGeo = new THREE.BufferGeometry();
+  dotsGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(DOTS * 3), 3));
+  const dotTex = canvasTex(32, 32, (x, w) => { x.fillStyle = '#fff'; x.beginPath(); x.arc(w / 2, w / 2, w / 2 - 2, 0, Math.PI * 2); x.fill(); });
+  const dotsMat = new THREE.PointsMaterial({ size: .085, map: dotTex, transparent: true, depthWrite: false });
+  dotsMat.color = dotColor; // mesma instância que readTheme atualiza
+  const dots = new THREE.Points(dotsGeo, dotsMat);
+  dots.frustumCulled = false;
+  // os pontos ficam numa cena própria, desenhada antes da principal e sem profundidade: os objetos sempre os cobrem
+  const backScene = new THREE.Scene();
+  backScene.add(dots);
+  renderer.autoClear = false;
+  function updateDots(a, w) {
+    dots.visible = w > .01;
+    if (!dots.visible) return;
+    dotsMat.opacity = w * .85;
+    const pos = dotsGeo.attributes.position;
+    for (let k = 0; k < DOTS; k++) {
+      orbitPoint(a + k / DOTS * Math.PI * 2, tmpDot);
+      pos.setXYZ(k, tmpDot.x, tmpDot.y, tmpDot.z);
+    }
+    pos.needsUpdate = true;
+  }
   const ringPos = (i, a, out) => {
     const ang = -a * .6 + i / n * Math.PI * 2, k = (CAM_Z + 2) / CAM_Z;
     return out.set(Math.cos(ang) * halfW * .8 * k, Math.sin(ang) * halfH * .72 * k, -2);
@@ -472,7 +503,7 @@ function start() {
     if (!h) return;
     const u = h.userData;
     if (u.focus > .5) u.spinTo += Math.PI * 2; // o objeto em foco dá uma volta
-    else stations[u.i]?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    else if (stations[u.i]) window.goTo ? window.goTo(stations[u.i]) : stations[u.i].scrollIntoView({ block: 'start' });
   });
   function pick() {
     ray.setFromCamera(pointer.ndc, camera);
@@ -532,6 +563,7 @@ function start() {
     camera.position.x += (pointer.x * .35 - camera.position.x) * k;
     camera.position.y += (pointer.y * .2 - camera.position.y) * k;
     camera.lookAt(0, 0, 0);
+    updateDots(orbit, heroW);
 
     holders.forEach((h, i) => {
       const u = h.userData, w = weights[i] || 0;
@@ -557,6 +589,8 @@ function start() {
       h.rotation.set(u.pitch, u.yaw + u.spin, 0);
       u.tick?.(t, dt, Math.max(u.focus, u.hover * .6));
     });
+    renderer.clear();
+    renderer.render(backScene, camera);
     renderer.render(scene, camera);
   }
 
