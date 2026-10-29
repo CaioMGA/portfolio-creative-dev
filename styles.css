@@ -48,7 +48,6 @@ h3{font:500 1.35rem/1.15 var(--display);margin:0}
 .tags{list-style:none;margin:auto 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .tags li{font:400 12px var(--mono);border:1px solid var(--line);padding:3px 8px}
 
-.note{margin:-12px 0 24px}
 .proj{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:8px 32px;padding:26px 0;border-top:1px solid var(--line);align-items:baseline;text-decoration:none;transition:padding .2s}
 .proj:last-child{border-bottom:1px solid var(--line)}
 .proj p{margin:0;color:var(--muted);max-width:56ch}

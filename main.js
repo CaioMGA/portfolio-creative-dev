@@ -10,9 +10,10 @@
     var a = document.createElement('a');
     a.className = 'proj';
     a.href = p.href || '#';
+    if (/^https?:/.test(a.href)) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
     var h = document.createElement('h3'); h.textContent = p.title;
     var d = document.createElement('p'); d.textContent = p.desc;
-    var y = document.createElement('span'); y.className = 'mono go'; y.textContent = p.year;
+    var y = document.createElement('span'); y.className = 'mono go'; y.textContent = p.tag + ' ↗';
     a.append(h, d, y);
     list.append(a);
   });

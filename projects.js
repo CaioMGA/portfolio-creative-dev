@@ -1,7 +1,8 @@
 // Edite esta lista para atualizar a seção de projetos.
-// href vazio ("#") deixa o item sem link externo.
+// "tag" aparece à direita de cada linha.
 window.PROJECTS = [
-  { title: "[Jogo profissional 1]", desc: "Seu papel, a engine e o que você entregou. Troque este texto.", year: "20XX", href: "#" },
-  { title: "[Projeto web front-end]", desc: "Produto ou interface em produção, stack e resultado.", year: "20XX", href: "#" },
-  { title: "[Experimento com IA]", desc: "Algo criativo feito com IA: o que faz e como funciona.", year: "2026", href: "#" },
+  { title: "Desenvolvedor Criativo", desc: "Newsletter no Substack sobre programação criativa e IA.", tag: "substack", href: "https://devcriativo.substack.com/" },
+  { title: "Blog Diário", desc: "Blog pessoal com o registro do dia a dia de código e experimentos.", tag: "blog", href: "https://caiomga.com/" },
+  { title: "the stained hanes show", desc: "Transmissão 24/7 sem parar, rodando na web.", tag: "stream 24/7", href: "https://tshs.pages.dev/" },
+  { title: "Caio's Clocks", desc: "Coleção de relógios criativos feitos para o navegador.", tag: "web", href: "https://caios-clocks.caiomga.workers.dev/" },
 ];
