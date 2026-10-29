@@ -507,7 +507,7 @@ function start() {
     else if (stations[u.i]) window.goTo ? window.goTo(stations[u.i]) : stations[u.i].scrollIntoView({ block: 'start' });
   });
   // giro de 360° com duração fixa; se pedir outro no meio, emenda a partir de onde está
-  const SPIN_DUR = 1.2;
+  const SPIN_DUR = 1.2, SPIN_LEAD = .3; // o giro começa 0,3 s antes de o objeto assentar
   function spin(u) {
     if (reduce) return;
     u.spinFrom = u.spin;
@@ -582,7 +582,8 @@ function start() {
       bgPos(i, t, a); clusterPos(i, orbit, t, b); ringPos(i, orbit, c);
       tmp.copy(a).lerp(b, heroW).lerp(c, contactW).lerp(f, w);
       // o objeto em foco chega mais firme, para assentar logo e poder girar
-      const kf = reduce ? k : 1 - Math.exp(-dt * (3.2 + 3.3 * w));
+      const rate = 3.2 + 3.3 * w;
+      const kf = reduce ? k : 1 - Math.exp(-dt * rate);
       h.position.lerp(tmp, kf);
       u.focus += (w - u.focus) * k;
       u.hover += ((hovered === h ? 1 : 0) - u.hover) * k * 1.5;
@@ -599,8 +600,10 @@ function start() {
       const focPitch = -pointer.y * .3 + .1;
       u.yaw += (idleYaw + (focYaw - idleYaw) * w - u.yaw) * k;
       u.pitch += (idlePitch + (focPitch - idlePitch) * w - u.pitch) * k;
-      // a estação entrou na tela: quando o objeto assenta na posição e na escala do foco, dá uma volta
-      if (centered[i] && !u.shown && h.position.distanceTo(tmp) < .06 && Math.abs(h.scale.x - s) < s * .02) { u.shown = true; spin(u); }
+      // a estação entrou na tela: o objeto dá uma volta logo antes de assentar na posição e na escala do foco.
+      // A aproximação é exponencial, então dá para estimar quanto falta para assentar (erro < 0,06 e < 2%).
+      const settle = Math.log(Math.max(1, h.position.distanceTo(tmp) / .06, Math.abs(h.scale.x - s) / (s * .02))) / rate;
+      if (centered[i] && !u.shown && settle <= SPIN_LEAD) { u.shown = true; spin(u); }
       if (w < .2) u.shown = false;
       u.spinT = Math.min(1, u.spinT + dt / SPIN_DUR);
       u.spin = u.spinFrom + (u.spinTo - u.spinFrom) * easeInOut(u.spinT);
