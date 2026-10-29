@@ -87,8 +87,7 @@
     if (q === 'pt' || q === 'en') return q;
     var saved = store('v3-lang');
     if (saved === 'pt' || saved === 'en') return saved;
-    var langs = navigator.languages || [navigator.language || ''];
-    return langs.some(function (l) { return /^pt/i.test(l); }) ? 'pt' : 'en';
+    return 'en'; // padrão do portfólio: inglês, mesmo para quem está no Brasil
   }
 
   var lang = 'pt';
