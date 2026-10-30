@@ -1,0 +1,183 @@
+/* v4 (a partir da v3): canvas 3D fixo atrás do conteúdo; seções deixam o ponteiro passar para a cena, painéis e cards não */
+:root{
+  --bg:#e9ecf1; --fg:#12141a; --muted:#566074; --line:#c5cbd7; --panel:#dde2ea;
+  --glass:rgba(233,236,241,.78);
+  --accent:#2f4bff; --accent-fg:#ffffff;
+  --display:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;
+  --body:'Instrument Sans','Helvetica Neue',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d0f14; --fg:#e8ebf2; --muted:#8c96aa; --line:#262b38; --panel:#151923;
+  --glass:rgba(13,15,20,.72);
+  --accent:#ff5c8a; --accent-fg:#14060b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d0f14; --fg:#e8ebf2; --muted:#8c96aa; --line:#262b38; --panel:#151923;
+  --glass:rgba(13,15,20,.72);
+  --accent:#ff5c8a; --accent-fg:#14060b; color-scheme:dark}
+
+*{box-sizing:border-box}
+/* cada rolagem avança uma tela: nav+hero, intro, cada projeto, método, trajetória, contato */
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+html.no-gl{scroll-snap-type:none}
+.hero,.screen,.station{scroll-snap-align:start;scroll-snap-stop:always}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 17px/1.6 var(--body);
+  padding-inline:max(16px,env(safe-area-inset-left,0px));overflow-x:hidden}
+.wrap{position:relative;max-width:1180px;margin:0 auto}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.mono{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.no-gl #scene{display:none}
+#tip{position:fixed;left:0;top:0;z-index:5;pointer-events:none;padding:6px 10px;background:var(--fg);color:var(--bg);
+  opacity:0;transform:translate(-50%,-150%);transition:opacity .15s;white-space:nowrap}
+#tip.on{opacity:1}
+
+/* loading: no ar por pelo menos 4 s e até a cena 3D desenhar; a órbita pontilhada ecoa a do hero */
+#loader{display:none}
+.loading #loader,.leaving #loader{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  background:var(--bg);transition:opacity .7s}
+.leaving #loader{opacity:0;pointer-events:none}
+html.loading{overflow:hidden}
+#loader .orbit{position:relative;width:min(320px,70vw);aspect-ratio:2.2;border:2px dotted var(--muted);border-radius:50%}
+#loader .dot{position:absolute;left:0;top:0;width:14px;height:14px;margin:-7px;border-radius:50%;background:var(--accent)}
+#pct{font:800 clamp(2.4rem,6vw,4rem)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+
+/* tudo que é "vazio" deixa o ponteiro chegar ao canvas */
+.wrap,.hero,section,.station,#stations{pointer-events:none}
+nav,.hero-copy,.panel,.card,.more,footer{pointer-events:auto}
+body.hovering{cursor:pointer}
+
+.panel{background:var(--glass);border:1px solid var(--line);padding:clamp(20px,3vw,36px);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+
+nav{position:absolute;z-index:2;top:0;left:0;right:0;display:flex;justify-content:space-between;gap:16px;padding-block:20px;flex-wrap:wrap}
+nav a{text-decoration:none}
+nav a:hover{color:var(--accent)}
+nav div{display:flex;gap:20px;flex-wrap:wrap}
+nav>span{margin-right:auto}
+/* seletor de idioma PT | EN */
+nav .lang{gap:2px}
+.lang button{font:inherit;letter-spacing:inherit;padding:0 4px;border:0;background:none;color:var(--muted);cursor:pointer}
+.lang button:hover{color:var(--accent)}
+.lang button[aria-pressed="true"]{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
+
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-bottom:56px}
+.hero-copy{max-width:min(640px,50%)}
+h1{font:800 clamp(2.2rem,4.2vw,3.4rem)/1.04 var(--display);letter-spacing:-.03em;margin:0 0 22px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.hero-copy p{max-width:44ch;margin:0;font-size:1.1rem}
+.hint{position:absolute;left:0;bottom:92px}
+.no-gl .hint{display:none}
+
+section{position:relative;padding-block:96px 0}
+.screen{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-block:48px}
+h2{font:800 clamp(1.8rem,4vw,2.6rem)/1.05 var(--display);letter-spacing:-.02em;margin:10px 0 24px;text-wrap:balance}
+h3{font:500 1.35rem/1.15 var(--display);margin:0}
+.lead{max-width:60ch;margin:0;font-size:1.1rem}
+.intro{max-width:640px}
+
+/* uma "estação" por projeto: o card fica à esquerda e o objeto 3D ocupa a direita da tela */
+.station{min-height:100svh;display:flex;align-items:center}
+.station.last{flex-direction:column;justify-content:center;align-items:flex-start;gap:16px}
+.card{width:min(460px,46%);display:flex;flex-direction:column;gap:14px;transition:opacity .4s,transform .4s}
+.card .count{display:flex;justify-content:space-between;gap:12px}
+.card .count b{font-weight:500;color:var(--accent)}
+.card h3{font:800 clamp(1.5rem,2.6vw,2rem)/1.05 var(--display);letter-spacing:-.02em}
+.card p{margin:0;color:var(--muted)}
+.card .time{margin:-6px 0 0;color:var(--accent)}
+.card .time:empty{display:none}
+.card figure{margin:0;aspect-ratio:1200/630;border:1px solid var(--line);overflow:hidden;background:var(--panel)}
+.card img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center}
+.card img.contain{object-fit:contain;object-position:center}
+.card .btn{align-self:flex-start}
+.station:not(.active) .card{opacity:.35}
+.no-gl .station{min-height:0;padding-block:24px}
+.no-gl .screen{min-height:0;padding-block:72px 0}
+.no-gl #contato{padding-bottom:96px}
+.no-gl .card{width:100%;max-width:640px}
+.no-gl .station .card{opacity:1}
+
+.btn{font:500 14px var(--mono);letter-spacing:.04em;padding:12px 18px;border:1px solid var(--accent);color:var(--accent);text-decoration:none;background:var(--glass)}
+.btn:hover{background:var(--accent);color:var(--accent-fg)}
+.more{margin:0}
+.more .btn{display:inline-block}
+
+.phases{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px}
+.phases li{border-top:1px solid var(--line);padding-top:16px;min-width:0}
+.phases li:first-child .mono{color:var(--accent)}
+.phases p{margin:8px 0 0;max-width:42ch}
+
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.tracks article{background:var(--bg);padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.tracks p{margin:0;color:var(--muted);font-size:15.5px}
+
+#contato{align-items:center}
+#contato .panel{max-width:640px;text-align:center}
+.contact{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
+.contact.links-row{margin-top:16px}
+footer a{color:inherit}
+footer a:hover{color:var(--accent)}
+
+/* jogos (games-v4.js): grade de cards com imagem, papel, plataforma e um resultado */
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px;margin-top:24px}
+.game{display:flex;flex-direction:column;gap:6px;text-decoration:none;min-width:0}
+.game figure{margin:0 0 6px;aspect-ratio:16/9;border:1px solid var(--line);overflow:hidden;background:var(--panel)}
+.game img{display:block;width:100%;height:100%;object-fit:cover}
+.game h3{font-size:1.15rem}
+.game .tech{color:var(--fg)}
+.game p{margin:0;color:var(--muted);font-size:15px}
+.tracks .studios{color:var(--fg);text-transform:none;letter-spacing:.02em;line-height:1.5}
+a.game:hover h3{color:var(--accent)}
+button{font:500 14px var(--mono);letter-spacing:.04em;padding:12px 18px;border:1px solid var(--fg);background:transparent;color:var(--fg);cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+button.primary:hover{filter:brightness(1.1)}
+/* Anterior / Próximo: fixos no centro da base, por cima da cena */
+.pager{position:fixed;z-index:3;left:50%;bottom:32px;transform:translateX(-50%);display:flex;gap:8px}
+.pager button{padding:10px 14px;font-size:13px;white-space:nowrap;background:var(--glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pager button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.pager button:disabled{opacity:.3;cursor:default}
+.no-gl .pager{display:none}
+/* Voltar ao topo: fixo no canto inferior direito, alinhado à coluna do conteúdo; some no hero */
+#top{position:fixed;z-index:3;bottom:32px;right:max(16px,calc((100vw - 1180px) / 2));padding:10px 14px;font-size:13px;white-space:nowrap;
+  transition:opacity .3s,visibility .3s,background .15s,color .15s;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+html.at-hero #top,html.loading #top{opacity:0;visibility:hidden;pointer-events:none}
+footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.no-gl footer{position:static;margin-top:72px}
+
+/* celular: objeto 3D na metade de cima, texto embaixo */
+@media(max-width:800px){
+  .hero{justify-content:flex-end;padding-bottom:128px}
+  .hero-copy{max-width:none}
+  .hint{display:none}
+  .station{align-items:flex-end;padding-bottom:calc(6svh + 68px)}
+  .pager{bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+  /* só a seta, para não bater nos botões Anterior/Próximo; o texto continua no DOM para leitores de tela */
+  #top{bottom:calc(28px + env(safe-area-inset-bottom,0px));right:12px;font-size:0;padding:10px 14px}
+  #top::before{content:"↑";font-size:16px;line-height:1}
+  footer{bottom:84px}
+  /* menu numa linha só, abaixo do nome */
+  nav.mono{font-size:11px;letter-spacing:.04em;padding-block:14px;gap:6px}
+  nav div{gap:14px}
+  nav .role{display:none} /* o nome cabe numa linha com o PT | EN; o título já diz a função */
+  nav .lang{order:1}
+  nav .links{order:2;flex-basis:100%}
+  /* telas de texto: espaço para os botões fixos e menos respiro interno */
+  .screen{padding-block:32px 112px} /* folga para o último item das telas altas ficar acima dos botões fixos */
+  .panel{padding:20px}
+  .phases{gap:20px}
+  .tracks article{padding:16px;gap:8px}
+  footer{background:var(--glass);border:1px solid var(--line);padding:10px 12px;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+  .station.last{justify-content:flex-end;align-items:stretch}
+  .card{width:100%;gap:10px}
+  .card p{font-size:15px;line-height:1.5}
+  .card figure{display:none}
+  .no-gl .card figure{display:block}
+}
+/* desktop com janela baixa: o card mais alto (APL, 715 px com o print) não cabe entre o menu e os botões fixos */
+@media(min-width:801px) and (max-height:860px){
+  .card figure{display:none}
+  .no-gl .card figure{display:block}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}

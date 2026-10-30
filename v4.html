@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caio Amaral · Desenvolvedor de games e produtos interativos</title>
+<meta name="description" content="Desenvolvedor de games há 9 anos: jogos 2D e 3D, simuladores e serious games para marcas, estúdios e empresas, e produtos interativos com IA no fluxo de trabalho.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="v4.css?v=4">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<!-- a tela de loading só existe com JS; v4.js tira esta classe -->
+<script>document.documentElement.classList.add('loading')</script>
+</head>
+<body>
+<!-- textos em PT-BR ficam aqui; data-i18n aponta para a tradução em v4-i18n.js -->
+<div id="loader" role="status" aria-label="Carregando" data-i18n-aria="loading">
+  <div class="orbit"><span class="dot"></span></div>
+  <strong id="pct">0%</strong>
+  <span class="mono" data-i18n="brand">caio amaral <span class="role">/ desenvolvedor de games e produtos interativos</span></span>
+</div>
+<!-- cena 3D fixa atrás do conteúdo; cada projeto é um objeto que entra em foco no scroll -->
+<canvas id="scene" aria-hidden="true"></canvas>
+<div id="tip" class="mono" aria-hidden="true"></div>
+<div class="pager" role="group" aria-label="Navegação entre telas" data-i18n-aria="pagerLabel">
+  <button id="prev" type="button" data-i18n="prev">↑ Anterior</button><button id="next" type="button" data-i18n="next">Próximo ↓</button>
+</div>
+<!-- fixo e sempre visível, menos no hero (v4.js liga e desliga a classe at-hero) -->
+<a class="btn" id="top" href="#hero" data-i18n="top">Voltar ao topo ↑</a>
+
+<div class="wrap">
+  <nav class="mono">
+    <span data-i18n="brand">caio amaral <span class="role">/ desenvolvedor de games e produtos interativos</span></span>
+    <div class="links"><a href="#jogos" data-i18n="navJogos">jogos</a><a href="#ia" data-i18n="navIa">projetos</a><a href="#metodo" data-i18n="navMetodo">como trabalho</a><a href="#trilha" data-i18n="navTrilha">trajetória</a><a href="#contato" data-i18n="navContato">contato</a></div>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="pt" lang="pt-BR">PT</button><button type="button" data-lang="en" lang="en">EN</button>
+    </div>
+  </nav>
+
+  <header class="hero" id="hero">
+    <div class="hero-copy">
+      <h1 data-i18n="h1"><em>9 anos</em> fazendo jogos. Hoje, também produtos interativos, com IA no meu fluxo.</h1>
+      <p data-i18n="heroP">Jogos 2D e 3D, simuladores e serious games para marcas, estúdios e empresas. Uso IA para chegar mais rápido a um protótipo que dá para testar, com o critério de quem faz software há 15 anos.</p>
+    </div>
+    <span class="mono hint" data-i18n="hint">passe o mouse nos objetos · clique para ver o projeto</span>
+  </header>
+
+  <!-- jogos vêm de games-v4.js; com a lista vazia, v4.js tira a seção e o link do menu -->
+  <section id="jogos" class="screen"><div class="panel">
+    <span class="mono" data-i18n="jogLabel">Jogos</span>
+    <h2 data-i18n="jogTitle">Jogos em que trabalhei</h2>
+    <p class="lead" data-i18n="jogLead">Alguns dos jogos em que trabalhei desde 2017, para marcas, empresas e estúdios.</p>
+    <div class="games" id="games"></div>
+  </div></section>
+
+  <section id="ia" class="screen">
+    <div class="intro panel">
+      <span class="mono" data-i18n="iaLabel">Produtos e experimentos</span>
+      <h2 data-i18n="iaTitle">Do protótipo ao produto no ar</h2>
+      <p class="lead" data-i18n="iaLead">Projetos meus e propostas para clientes, todos no ar. A IA acelera; as decisões de produto, design e arquitetura são minhas.</p>
+    </div>
+  </section>
+  <div id="stations"></div>
+  <!-- v4.js move este link para a tela do último projeto -->
+  <p class="more"><a class="btn" href="https://brchad.com/" target="_blank" rel="noopener noreferrer" data-i18n="more">Entre outros ↗</a></p>
+
+  <section id="metodo" class="screen"><div class="panel">
+    <span class="mono" data-i18n="metLabel">Como trabalho</span>
+    <h2 data-i18n="metTitle">Critério de sênior, velocidade de IA</h2>
+    <ol class="phases">
+      <li><span class="mono" data-i18n="ph1k">01 · definir</span><h3 data-i18n="ph1t">Defino o que importa</h3><p data-i18n="ph1p">O problema, o público e o que o jogador ou o usuário deve sentir. É aqui que a experiência faz mais diferença.</p></li>
+      <li><span class="mono" data-i18n="ph2k">02 · prototipar</span><h3 data-i18n="ph2t">Prototipo para decidir</h3><p data-i18n="ph2p">Testo alternativas rápido, com IA, e escolho com base no que já vi funcionar e falhar em 9 anos de projetos de games.</p></li>
+      <li><span class="mono" data-i18n="ph3k">03 · entregar</span><h3 data-i18n="ph3t">Entrego com qualidade</h3><p data-i18n="ph3p">Arquitetura, revisão de cada linha, testes e deploy seguindo diretrizes que eu escrevo. A IA executa; a responsabilidade é minha.</p></li>
+    </ol>
+  </div></section>
+
+  <section id="trilha" class="screen"><div class="panel">
+    <span class="mono" data-i18n="triLabel">Trajetória</span>
+    <h2 data-i18n="triTitle">Como cheguei aqui</h2>
+    <div class="tracks">
+      <article>
+        <span class="mono" data-i18n="originK">o começo</span>
+        <h3 data-i18n="origin">Games desde sempre</h3>
+        <p data-i18n="originP">Aos 4 anos, ganhei um videogame num pacotinho de batata frita. E faço aniversário no mesmo dia que o PlayStation.</p>
+      </article>
+      <article>
+        <span class="mono">2010–2016</span>
+        <h3 data-i18n="t2010">Do estágio em TI ao front-end</h3>
+        <p data-i18n="t2010p">Estagiário de TI em 2010; a partir de 2015, consultor analista e desenvolvedor front-end para Grupo Amil e One Health.</p>
+      </article>
+      <article>
+        <span class="mono">2017</span>
+        <h3>Game developer</h3>
+        <p data-i18n="t2017p">Jogos 2D e 3D, simuladores, serious games, fun games, apps de streaming, jogos licenciados e jogos NFT.</p>
+        <p class="mono studios"><span data-i18n="studios">Estúdios</span>: Blue Pixel, i9Ação, Zero Um Digital, Take4Games, IGS</p>
+      </article>
+      <article>
+        <span class="mono">2023</span>
+        <h3>Game designer</h3>
+        <p data-i18n="t2023p">Além de programar, passei a cuidar do game design de projetos novos, como game designer na i9Ação.</p>
+      </article>
+      <article>
+        <span class="mono">2024</span>
+        <h3 data-i18n="t2024">IA no fluxo de produção</h3>
+        <p data-i18n="t2024p">Incorporei IA ao meu processo com diretrizes próprias de design, código e deploy, escritas a partir dessa bagagem.</p>
+      </article>
+    </div>
+  </div></section>
+
+  <section id="contato" class="screen">
+    <div class="panel">
+      <span class="mono" data-i18n="conLabel">Contato</span>
+      <h2 data-i18n="conTitle">Tem um jogo ou um produto interativo em mente? Vamos conversar.</h2>
+      <div class="contact">
+        <button class="primary" id="copy" type="button">caiomga@gmail.com</button>
+        <span class="mono" id="msg" role="status" data-i18n="copyHint">clique para copiar</span>
+      </div>
+      <div class="contact links-row">
+        <a class="btn" href="mailto:caiomga@gmail.com" data-i18n="mail">Enviar e-mail ↗</a>
+        <a class="btn" href="https://github.com/CaioMGA" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a class="btn" href="https://devcriativo.substack.com/" target="_blank" rel="noopener noreferrer">Newsletter ↗</a>
+      </div>
+    </div>
+    <footer class="mono"><span>© <span id="year">2026</span> Caio Amaral · <a href="https://github.com/CaioMGA/portfolio-creative-dev" target="_blank" rel="noopener noreferrer" data-i18n="openSource">código aberto no GitHub</a></span></footer>
+  </section>
+</div>
+<script src="projects-v2.js?v=2"></script>
+<script src="projects-v4.js?v=2"></script>
+<script src="games-v4.js?v=2"></script>
+<script src="v4-i18n.js?v=4"></script>
+<script src="v4.js?v=1"></script>
+<script type="module" src="v4-scene.js?v=1"></script>
+</body>
+</html>

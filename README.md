@@ -15,8 +15,9 @@ Plain static HTML/CSS/JS, no build step, no backend.
 | `v3.html` | v3, the 3D version served at the link above: a three.js scene with one procedural object per project |
 | `v3.js`, `v3-scene.js`, `v3.css` | v3 DOM/scroll logic, three.js scene, styles |
 | `v3-i18n.js`, `projects-v3.js` | EN/PT-BR strings and the v3 project list |
+| `v4.html` + `v4*.js`, `v4.css`, `projects-v4.js`, `games-v4.js` | v4, a copy of v3 repositioned around game development: games section (data in `games-v4.js`; empty list hides it), cards without hour counts, rewritten method/journey/contact |
 
-Branches: `main` (current), `v3` (where the 3D version was built), `hero-simples` (hero experiments).
+Branches: `main` (current), `v3` (where the 3D version was built), `v4` (repositioning around games), `hero-simples` (hero experiments).
 
 ## Run locally
 
