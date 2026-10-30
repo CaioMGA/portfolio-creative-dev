@@ -180,4 +180,11 @@ footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content
   .card figure{display:none}
   .no-gl .card figure{display:block}
 }
+/* desktop: menu sempre visível; transparente no hero, com fundo de vidro nas outras telas (at-hero vem do v4.js) */
+@media(min-width:801px){
+  nav{position:fixed;z-index:4;top:0;left:0;right:0;padding-inline:max(16px,calc((100% - 1180px) / 2));
+    border-bottom:1px solid transparent;transition:background .3s,border-color .3s}
+  .screen{padding-top:84px} /* o conteúdo das telas altas começa abaixo do menu fixo */
+  html:not(.at-hero) nav{background:var(--glass);border-bottom-color:var(--line);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}
