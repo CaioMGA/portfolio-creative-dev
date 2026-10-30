@@ -15,7 +15,7 @@
     navTrilha: 'journey',
     navContato: 'contact',
     h1: '<em>9 years</em> making games. Now also interactive products, with AI in my workflow.',
-    heroP: '2D and 3D games, simulators and serious games for brands, studios and companies. I use AI to reach a testable prototype faster, with the judgment of someone who has been building software for 15 years.',
+    heroP: '2D and 3D games, simulators and serious games for brands, studios and companies. I use AI to reach a testable prototype faster, with the judgment of someone who has been building professional software for 15 years.',
     hint: 'hover the objects · click to see the project',
     jogLabel: 'Games',
     jogTitle: 'Games I worked on',
