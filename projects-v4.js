@@ -15,9 +15,13 @@ window.PROJECTS = window.PROJECTS.filter(function (p) { return p.title !== "Mixt
 var EXTRA = {
   "BRCHAD Games": ["Plataforma", "produto completo · back-end, front-end e UX"],
   "Academia Paulista de Letras: proposta de novo site": ["Site institucional", "2 propostas de design · CMS com fluxo editorial"],
-  "the stained hanes show 24/7 unstoppable stream": ["Streaming", "todo mundo assiste no mesmo segundo · TV 3D em three.js"],
+  "the stained hanes show 24/7 unstoppable stream": ["Streaming", "streaming 24/7 de vídeos do YouTube · web 3D"],
   "First of October Radio": ["Áudio", "rádio 24/7 sem servidor"],
-  "Caio's Clocks": ["Creative coding", "série contínua de experimentos visuais"],
-  "Tomos do blog": ["Automação", "de 3 dias para 5 minutos por livro"],
+  "Caio's Clocks": ["Creative coding", "programação criativa em forma de relógio"],
+  "Tomos do blog": ["Automação", "automatização de layout e publicação"],
 };
 window.PROJECTS.forEach(function (p) { var x = EXTRA[p.title] || []; p.tag = x[0] || p.tag; p.time = x[1]; });
+
+// textos que mudam só na v4 (a v2 continua com o de projects-v2.js)
+var BRCHAD = window.PROJECTS.filter(function (p) { return p.title === "BRCHAD Games"; })[0];
+if (BRCHAD) BRCHAD.desc = "Uma plataforma completa de jogos de raciocínio: editores, servidor de publicação, player para embutir em outros sites, analytics e dashboard. Criei quase 800 jogos, que podem ser jogados nos sites de acervo. Fiz com IA e integrei ao Cruzadinha.com.br.";
