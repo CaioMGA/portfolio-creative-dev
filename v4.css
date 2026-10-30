@@ -150,6 +150,7 @@ footer{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content
 @media(max-width:800px){
   .hero{justify-content:flex-end;padding-bottom:128px}
   .hero-copy{max-width:none}
+  .hero-copy h1{text-align:center}
   .hint{display:none}
   .station{align-items:flex-end;padding-bottom:calc(6svh + 68px)}
   .pager{bottom:calc(28px + env(safe-area-inset-bottom,0px))}
