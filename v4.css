@@ -42,6 +42,7 @@ a{color:inherit}
 html.loading{overflow:hidden}
 #loader .orbit{position:relative;width:min(320px,70vw);aspect-ratio:2.2;border:2px dotted var(--muted);border-radius:50%}
 #loader .dot{position:absolute;left:0;top:0;width:14px;height:14px;margin:-7px;border-radius:50%;background:var(--accent)}
+#loader .mono{text-align:center;max-width:calc(100% - 32px)}
 #pct{font:800 clamp(2.4rem,6vw,4rem)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 
 /* tudo que é "vazio" deixa o ponteiro chegar ao canvas */
