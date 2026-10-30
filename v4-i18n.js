@@ -62,7 +62,7 @@
   // mesma ordem de PROJECTS (projects-v2.js + projects-v4.js): o índice casa os textos
   var PROJECTS_EN = [
     { title: 'BRCHAD Games', time: 'full product · back end, front end and UX', tag: 'Platform',
-      desc: 'A complete platform for puzzle games: editors, a publishing server, an embeddable player, analytics and a dashboard. I created almost 800 games, all playable on the archive sites. I built it with AI and integrated it into Cruzadinha.com.br.',
+      desc: 'A complete platform for puzzle games: editors, a publishing server, an embeddable player, analytics and a dashboard. I created almost 800 games, all playable on the archive sites. I built it with AI.',
       alt: 'BRChad Games Admin game schedule: stats, filters by type and period, and a calendar of scheduled games.' },
     { title: 'Academia Paulista de Letras: new institutional website proposal', time: '2 design proposals · CMS with editorial workflow', tag: 'Institutional website',
       desc: 'An independent proposal for a new website for the APL (the São Paulo Academy of Letters): two design directions, Estante and Clássica, real content from the 40 chairs, 80 AI-generated biographies labeled as such, and an editing panel with roles for the staff and the academicians (in the full version).',

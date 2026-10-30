@@ -24,4 +24,4 @@ window.PROJECTS.forEach(function (p) { var x = EXTRA[p.title] || []; p.tag = x[0
 
 // textos que mudam só na v4 (a v2 continua com o de projects-v2.js)
 var BRCHAD = window.PROJECTS.filter(function (p) { return p.title === "BRCHAD Games"; })[0];
-if (BRCHAD) BRCHAD.desc = "Uma plataforma completa de jogos de raciocínio: editores, servidor de publicação, player para embutir em outros sites, analytics e dashboard. Criei quase 800 jogos, que podem ser jogados nos sites de acervo. Fiz com IA e integrei ao Cruzadinha.com.br.";
+if (BRCHAD) BRCHAD.desc = "Uma plataforma completa de jogos de raciocínio: editores, servidor de publicação, player para embutir em outros sites, analytics e dashboard. Criei quase 800 jogos, que podem ser jogados nos sites de acervo. Fiz com IA.";
