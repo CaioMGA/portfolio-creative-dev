@@ -261,73 +261,61 @@ function makeClock() {
   return g;
 }
 
-// Tomos do blog: posts voando para uma pilha de livros
-function makeBooks() {
+// Biomas do Brasil: um diorama de prismas hexagonais com as cores dos biomas do site.
+// Cada hexágono pertence ao bioma da semente mais próxima (layout aproximado do mapa); em foco o relevo cresce
+// numa onda, as árvores aparecem na Amazônia e na Mata Atlântica e a água do Pantanal e do litoral ondula.
+function makeBiomes() {
   const g = new THREE.Group();
-  const pagesMat = mat(0xf3eee2, { roughness: .9 });
-  const specs = [
-    { w: 2.1, t: .34, d: 1.45, color: '#2f4bff', ink: '#ffffff', n: 'I' },
-    { w: 1.95, t: .28, d: 1.4, color: '#ff5c8a', ink: '#14060b', n: 'II' },
-    { w: 2.05, t: .38, d: 1.45, color: '#f2c14e', ink: '#12141a', n: 'III' },
-    { w: 1.85, t: .3, d: 1.35, color: '#1d1f27', ink: '#f4f1ea', n: 'IV' },
+  const BIOMES = [
+    { c: 0x4f9a5a, h: .55, trees: true, seeds: [[-1.6, -1.5], [.2, -2.1], [-2.4, -.4]] }, // Amazônia
+    { c: 0xb98a35, h: .75, seeds: [[-.1, .1], [.5, -.6]] },                                // Cerrado
+    { c: 0xd7765f, h: .6, seeds: [[1.6, -1], [1.9, -1.8]] },                               // Caatinga
+    { c: 0x24a58c, h: 1, trees: true, seeds: [[1.2, .8], [.5, 1.6]] },                     // Mata Atlântica
+    { c: 0x1aa3c4, h: .3, water: true, seeds: [[-1.3, .9]] },                              // Pantanal
+    { c: 0x8a7fd0, h: .45, seeds: [[-.3, 2.6]] },                                          // Pampas
   ];
-  let y = -.65;
-  const books = specs.map((b, i) => {
-    const book = new THREE.Group();
-    const cover = mat(b.color, { roughness: .55 });
-    const top = rbox(b.w, .04, b.d, .015, cover); top.position.y = b.t / 2 - .02; book.add(top);
-    const bot = rbox(b.w, .04, b.d, .015, cover); bot.position.y = -b.t / 2 + .02; book.add(bot);
-    const spine = rbox(b.w, b.t, .05, .02, cover); spine.position.z = b.d / 2 - .025; book.add(spine);
-    const pages = new THREE.Mesh(new THREE.BoxGeometry(b.w - .08, b.t - .07, b.d - .06), pagesMat);
-    pages.position.z = -.03; book.add(pages);
-    const tex = canvasTex(512, Math.round(512 * b.t / b.w), (x, w, h) => {
-      x.fillStyle = b.color; x.fillRect(0, 0, w, h);
-      x.fillStyle = b.ink; x.textBaseline = 'middle';
-      x.font = `800 ${Math.round(h * .42)}px ${DISPLAY}`; x.fillText('TOMO ' + b.n, 26, h / 2 + 2);
-      x.font = `500 ${Math.round(h * .2)}px ${MONO}`; x.textAlign = 'right'; x.fillText('DEV CRIATIVO', w - 26, h / 2);
-    });
-    const plate = new THREE.Mesh(new THREE.PlaneGeometry(b.w - .04, b.t - .02), new THREE.MeshStandardMaterial({ map: tex, roughness: .6 }));
-    plate.position.z = b.d / 2 + .002; book.add(plate);
-    y += b.t / 2;
-    book.userData = { y, rot: (i % 2 ? 1 : -1) * (.05 + i * .03) };
-    book.position.set((i % 2 ? .06 : -.05), y, 0);
-    book.rotation.y = book.userData.rot;
-    y += b.t / 2 + .01;
-    g.add(book); return book;
-  });
-  const stackTop = y;
-
-  const sheet = canvasTex(128, 168, (x, w, h) => {
-    x.fillStyle = '#ffffff'; x.fillRect(0, 0, w, h);
-    x.fillStyle = '#ff5c8a'; x.fillRect(14, 16, 64, 10);
-    x.fillStyle = '#c5cbd7';
-    for (let r = 0; r < 9; r++) x.fillRect(14, 40 + r * 13, r % 3 === 2 ? 70 : 100, 5);
-  });
-  const sheetGeo = new THREE.PlaneGeometry(.34, .44);
-  const posts = Array.from({ length: 9 }, (_, i) => {
-    const p = new THREE.Mesh(sheetGeo, new THREE.MeshStandardMaterial({ map: sheet, side: THREE.DoubleSide, transparent: true, roughness: .8 }));
-    const a = i / 9 * Math.PI * 2;
-    p.userData.from = new THREE.Vector3(Math.cos(a) * 1.7, .9 + Math.sin(a * 3) * .4, Math.sin(a) * 1.2);
-    p.position.set(0, stackTop, 0);
-    g.add(p); return p;
-  });
-  const to = new THREE.Vector3(0, stackTop + .05, 0);
+  const COAST = 0x4f86d8;
+  const R = .3, W = R * Math.sqrt(3), RINGS = 5;
+  const hexGeo = new THREE.CylinderGeometry(R * .96, R * .96, 1, 6);
+  hexGeo.translate(0, .5, 0); // base no chão: escalar em y só faz o prisma crescer para cima
+  const mats = BIOMES.map(b => mat(b.c, { roughness: .7, flatShading: true }));
+  const coastMat = mat(COAST, { roughness: .2, metalness: .1 });
+  const leaf = mat(0x1f5e34, { roughness: .8, flatShading: true });
+  const coneGeo = new THREE.ConeGeometry(.11, .3, 6);
+  const cells = [];
+  for (let q = -RINGS; q <= RINGS; q++) for (let r = Math.max(-RINGS, -q - RINGS); r <= Math.min(RINGS, -q + RINGS); r++) {
+    const x = W * (q + r / 2), z = R * 1.5 * r;
+    if (Math.hypot(x, z) > R * 1.5 * RINGS + .05) continue;
+    // o litoral é a faixa leste/nordeste do anel de fora
+    const edge = Math.max(Math.abs(q), Math.abs(r), Math.abs(q + r)) === RINGS;
+    let bi = -1;
+    if (!(edge && x > -.2)) {
+      let best = 1e9;
+      BIOMES.forEach((b, i) => b.seeds.forEach(([sx, sz]) => { const d = (x - sx) ** 2 + (z - sz) ** 2; if (d < best) { best = d; bi = i; } }));
+    }
+    const b = BIOMES[bi];
+    const base = b ? b.h * (.75 + .5 * Math.abs(Math.sin(x * 3.1 + z * 1.7))) : .12;
+    const m = new THREE.Mesh(hexGeo, b ? mats[bi] : coastMat);
+    m.position.set(x, 0, z);
+    g.add(m);
+    const cell = { m, base, water: !b || b.water, phase: x * .9 + z * .6, tree: null };
+    if (b && b.trees && Math.sin(x * 7 + z * 11) > -.2) {
+      const t = new THREE.Mesh(coneGeo, leaf); t.position.set(x, 0, z); g.add(t); cell.tree = t;
+    }
+    cells.push(cell);
+  }
+  g.rotation.x = .55; // inclinado para mostrar o relevo de cima
   g.userData.tick = (t, dt, f) => {
-    books.forEach((b, i) => {
-      b.position.y = b.userData.y + f * i * .14 + Math.sin(t * 1.4 + i) * .02 * f;
-      b.rotation.y = b.userData.rot * (1 + f * 1.5);
-    });
-    // cada post voa em arco até o topo da pilha, girando e encolhendo
-    posts.forEach((p, i) => {
-      const k = ((t * .3 + i / posts.length) % 1 + 1) % 1;
-      p.visible = f > .05;
-      p.position.lerpVectors(p.userData.from, to, easeInOut(k));
-      p.position.y += Math.sin(k * Math.PI) * .35;
-      p.rotation.set(k * 5 + i, k * 3, k * 2);
-      p.scale.setScalar(f * (1 - k * .85));
-      p.material.opacity = Math.min(1, (1 - k) * 4) * f;
+    cells.forEach(c => {
+      // fora de foco o terreno é quase plano; em foco o relevo sobe numa onda que corre pelo mapa
+      const wave = .5 + .5 * Math.sin(t * 1.6 - c.phase);
+      let h = .1 + c.base * f * (.75 + .25 * wave);
+      if (c.water) h = .1 + c.base * (.4 + .2 * Math.sin(t * 2.4 + c.phase * 2)) * (.5 + .5 * f);
+      c.m.scale.y = h;
+      if (c.tree) { c.tree.position.y = h + .15; c.tree.scale.setScalar(Math.max(.001, f)); }
     });
   };
+  g.userData.tick(0, 0, 0);
   return g;
 }
 
@@ -406,7 +394,7 @@ const MAKERS = {
   'the stained hanes show 24/7 unstoppable stream': makeTV,
   'First of October Radio': makeRadio,
   "Caio's Clocks": makeClock,
-  'Tomos do blog': makeBooks,
+  'Biomas do Brasil': makeBiomes,
 };
 
 // ---------- cena ----------
@@ -445,7 +433,7 @@ function start() {
   new MutationObserver(readTheme).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
   const holders = projects.map((p, i) => {
-    const obj = (MAKERS[p.obj] || MAKERS[p.title] || makeBooks)();
+    const obj = (MAKERS[p.obj] || MAKERS[p.title] || makeGrid)();
     // normaliza: todo objeto cabe numa caixa de ~2,6 e fica centrado no próprio holder
     const box = new THREE.Box3().setFromObject(obj);
     const size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());

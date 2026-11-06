@@ -56,11 +56,11 @@
     pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', viewProject: 'Ver projeto', spinTip: 'clique para girar', lampTip: 'clique para interagir' },
     en: { copied: 'copied', copyFail: 'select and copy it manually', viewProject: 'View project', spinTip: 'click to spin', lampTip: 'click to interact' },
   };
-  // mesma ordem de PROJECTS (projects-v2.js + projects-v4.js): o índice casa os textos
+  // mesma ordem final de PROJECTS (projects-v2.js + projects-v4.js): o índice casa os textos
   var PROJECTS_EN = [
-    { title: 'BRCHAD Games', time: 'full product · back end, front end and UX', tag: 'Platform',
-      desc: 'A complete platform for puzzle games: editors, a publishing server, an embeddable player, analytics and a dashboard. I created almost 800 games, all playable on the archive sites. I built it with AI.',
-      alt: 'BRChad Games Admin game schedule: stats, filters by type and period, and a calendar of scheduled games.' },
+    { title: 'Biomas do Brasil', time: '3D map with real terrain · open data', tag: 'Interactive atlas',
+      desc: 'An interactive atlas of Brazil’s biomes: a 3D map with real terrain and layers (borders, rivers, capitals), one page per biome with a thematic map, freely licensed photos and a quiz, and a passport that earns a stamp for every quiz you pass. Data from IBGE (Brazil’s statistics institute) and other public sources, credited on each map.',
+      alt: 'Biomas do Brasil home: a 3D relief map of the biomes over South America, the list of biomes, the layers and the panel with Brazil’s figures.' },
     { title: 'Academia Paulista de Letras: new institutional website proposal', time: '2 design proposals · CMS with editorial workflow', tag: 'Institutional website',
       desc: 'An independent proposal for a new website for the APL (the São Paulo Academy of Letters): two design directions, Estante and Clássica, real content from the 40 chairs, 80 AI-generated biographies labeled as such, and an editing panel with roles for the staff and the academicians (in the full version).',
       alt: 'Home of the prototype’s Estante version: a news carousel over an ornamental background and the banner saying this is not the Academy’s official site.' },
@@ -73,9 +73,9 @@
     { title: "Caio's Clocks", time: 'creative coding in clock form', tag: 'Creative coding',
       desc: 'One new creative-coding clock at a time, between 2025 and 2026. Each one tests a different visual idea.',
       alt: "Clock 17 from Caio's Clocks: a game board with cards, a die and a pawn." },
-    { title: 'Blog tomes', time: 'layout and publishing automation', tag: 'Automation',
-      desc: 'I automated compiling my daily posts into books. Each tome took 3 to 4 days of manual work; now it takes 2 to 5 minutes, and the time saved goes back into writing.',
-      alt: 'Mascot of the Desenvolvedor Criativo newsletter: a blue 3D fish.' },
+    { title: 'BRCHAD Games', time: 'full product · back end, front end and UX', tag: 'Platform',
+      desc: 'A complete platform for puzzle games: editors, a publishing server, an embeddable player, analytics and a dashboard. I created almost 800 games, all playable on the archive sites. I built it with AI.',
+      alt: 'BRChad Games Admin game schedule: stats, filters by type and period, and a calendar of scheduled games.' },
   ];
 
   var root = document.documentElement;
