@@ -261,58 +261,40 @@ function makeClock() {
   return g;
 }
 
-// Biomas do Brasil: um diorama de prismas hexagonais com as cores dos biomas do site.
-// Cada hexágono pertence ao bioma da semente mais próxima (layout aproximado do mapa); em foco o relevo cresce
-// numa onda, as árvores aparecem na Amazônia e na Mata Atlântica e a água do Pantanal e do litoral ondula.
+// Biomas do Brasil: o mapa do Brasil em hexágonos, cada um com a cor do seu bioma (paleta do atlas).
+// A grade sai dos contornos do IBGE usados no atlas (sem o Costeiro-marinho), com o hexágono do tamanho do Pampa;
+// cada célula é [coluna, linha, bioma], linhas ímpares deslocadas meio hexágono, linha 0 ao norte.
+const BRAZIL_HEX = [[2,0,0],[3,0,0],[4,0,0],[5,0,0],[1,1,0],[2,1,0],[3,1,0],[4,1,0],[5,1,0],[6,1,1],[1,2,0],[2,2,0],[3,2,0],[4,2,0],[5,2,0],[6,2,1],[7,2,2],[8,2,2],[0,3,0],[1,3,0],[2,3,0],[3,3,0],[4,3,0],[5,3,1],[6,3,2],[7,3,2],[3,4,0],[4,4,1],[5,4,1],[6,4,1],[7,4,2],[3,5,4],[4,5,1],[5,5,1],[6,5,1],[4,6,1],[5,6,3],[6,6,3],[7,6,3],[4,7,3],[5,7,3],[4,8,5],[5,8,3]];
 function makeBiomes() {
   const g = new THREE.Group();
-  const BIOMES = [
-    { c: 0x4f9a5a, h: .55, trees: true, seeds: [[-1.6, -1.5], [.2, -2.1], [-2.4, -.4]] }, // Amazônia
-    { c: 0xb98a35, h: .75, seeds: [[-.1, .1], [.5, -.6]] },                                // Cerrado
-    { c: 0xd7765f, h: .6, seeds: [[1.6, -1], [1.9, -1.8]] },                               // Caatinga
-    { c: 0x24a58c, h: 1, trees: true, seeds: [[1.2, .8], [.5, 1.6]] },                     // Mata Atlântica
-    { c: 0x1aa3c4, h: .3, water: true, seeds: [[-1.3, .9]] },                              // Pantanal
-    { c: 0x8a7fd0, h: .45, seeds: [[-.3, 2.6]] },                                          // Pampas
-  ];
-  const COAST = 0x4f86d8;
-  const R = .3, W = R * Math.sqrt(3), RINGS = 5;
-  const hexGeo = new THREE.CylinderGeometry(R * .96, R * .96, 1, 6);
+  // ordem: Amazônia, Cerrado, Caatinga, Mata Atlântica, Pantanal, Pampa; alturas sorteadas uma vez e fixadas
+  const COLORS = [0x4f9a5a, 0xb98a35, 0xd7765f, 0x24a58c, 0x1aa3c4, 0x8a7fd0];
+  const HEIGHTS = [.62, 1.05, .38, 1.3, .27, .81];
+  const R = .5, W = R * Math.sqrt(3);
+  const hexGeo = new THREE.CylinderGeometry(R * .94, R * .94, 1, 6);
   hexGeo.translate(0, .5, 0); // base no chão: escalar em y só faz o prisma crescer para cima
-  const mats = BIOMES.map(b => mat(b.c, { roughness: .7, flatShading: true }));
-  const coastMat = mat(COAST, { roughness: .2, metalness: .1 });
-  const leaf = mat(0x1f5e34, { roughness: .8, flatShading: true });
-  const coneGeo = new THREE.ConeGeometry(.11, .3, 6);
-  const cells = [];
-  for (let q = -RINGS; q <= RINGS; q++) for (let r = Math.max(-RINGS, -q - RINGS); r <= Math.min(RINGS, -q + RINGS); r++) {
-    const x = W * (q + r / 2), z = R * 1.5 * r;
-    if (Math.hypot(x, z) > R * 1.5 * RINGS + .05) continue;
-    // o litoral é a faixa leste/nordeste do anel de fora
-    const edge = Math.max(Math.abs(q), Math.abs(r), Math.abs(q + r)) === RINGS;
-    let bi = -1;
-    if (!(edge && x > -.2)) {
-      let best = 1e9;
-      BIOMES.forEach((b, i) => b.seeds.forEach(([sx, sz]) => { const d = (x - sx) ** 2 + (z - sz) ** 2; if (d < best) { best = d; bi = i; } }));
-    }
-    const b = BIOMES[bi];
-    const base = b ? b.h * (.75 + .5 * Math.abs(Math.sin(x * 3.1 + z * 1.7))) : .12;
-    const m = new THREE.Mesh(hexGeo, b ? mats[bi] : coastMat);
+  const mats = COLORS.map(c => mat(c, { roughness: .65, flatShading: true }));
+  const cols = Math.max(...BRAZIL_HEX.map(h => h[0])), rows = Math.max(...BRAZIL_HEX.map(h => h[1]));
+  const cells = BRAZIL_HEX.map(([c, r, b]) => {
+    const m = new THREE.Mesh(hexGeo, mats[b]);
+    const x = W * (c + (r % 2 ? .5 : 0) - cols / 2), z = R * 1.5 * (r - rows / 2);
     m.position.set(x, 0, z);
     g.add(m);
-    const cell = { m, base, water: !b || b.water, phase: x * .9 + z * .6, tree: null };
-    if (b && b.trees && Math.sin(x * 7 + z * 11) > -.2) {
-      const t = new THREE.Mesh(coneGeo, leaf); t.position.set(x, 0, z); g.add(t); cell.tree = t;
-    }
-    cells.push(cell);
-  }
-  g.rotation.x = .55; // inclinado para mostrar o relevo de cima
+    return { m, b, phase: x * .8 + z * .5 };
+  });
+  g.rotation.x = .7; // inclinado para o norte ficar em cima e o relevo aparecer
+
+  // clique: os territórios dos biomas oscilam em altura por alguns segundos, cada bioma no seu ritmo
+  const st = { osc: 0 };
+  g.userData.tip = 'lampTip';
+  g.userData.onClick = () => { st.osc = 1; };
   g.userData.tick = (t, dt, f) => {
+    st.osc *= Math.exp(-(dt || 0) * .8);
     cells.forEach(c => {
-      // fora de foco o terreno é quase plano; em foco o relevo sobe numa onda que corre pelo mapa
-      const wave = .5 + .5 * Math.sin(t * 1.6 - c.phase);
-      let h = .1 + c.base * f * (.75 + .25 * wave);
-      if (c.water) h = .1 + c.base * (.4 + .2 * Math.sin(t * 2.4 + c.phase * 2)) * (.5 + .5 * f);
-      c.m.scale.y = h;
-      if (c.tree) { c.tree.position.y = h + .15; c.tree.scale.setScalar(Math.max(.001, f)); }
+      const H = HEIGHTS[c.b];
+      const wave = Math.sin(t * 1.8 - c.phase); // onda que corre pelos hexágonos
+      const osc = Math.sin(t * 5 + c.b * 1.9) * st.osc; // o bioma inteiro sobe e desce junto
+      c.m.scale.y = Math.max(.05, .15 + H * f * (1 + .18 * wave + .6 * osc));
     });
   };
   g.userData.tick(0, 0, 0);
