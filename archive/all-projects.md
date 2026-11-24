@@ -8,7 +8,7 @@ desde nov/2023.
 Marcas:
 - **[BRCHAD]**: já está no brchad.com (descrição tirada de lá).
 - **[Claude]**: feito com o Claude Code (set–nov 2026), ainda não está no brchad.com.
-- **[cliente]**: trabalho para cliente. Decidir se entra com nome, anonimizado ou não entra (o repo é público!).
+- **[cliente]**: trabalho para cliente (entra com o nome do cliente).
 - **[lab]**: estudo, curso ou experimento. Decidir se aparece no Arquivo.
 - **❓**: descrição a confirmar pelo dono.
 - **~data**: data aproximada (o brchad.com não informa; usei a data da pasta).
