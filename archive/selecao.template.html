@@ -1,0 +1,292 @@
+<title>Seleção do Arquivo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a catalog ledger — sticky control bar, then year > month groups, one row per project with a 3rem checkbox in the left column. */
+:root {
+  --bg: #eef1f6;
+  --surface: #ffffff;
+  --ink: #141c2b;
+  --muted: #586476;
+  --line: #d6dce6;
+  --accent: #2343d1;
+  --accent-ink: #ffffff;
+  --picked: #e5eaff;
+  --t-brchad: #9a5b00;
+  --t-claude: #6a3fc8;
+  --t-cliente: #0b7a6b;
+  --t-lab: #5d6677;
+  --t-confirmar: #b3261e;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e131b; --surface: #151c27; --ink: #e6ebf2; --muted: #97a2b4; --line: #263143;
+    --accent: #7f98ff; --accent-ink: #0e131b; --picked: #1a2546;
+    --t-brchad: #f0b45a; --t-claude: #b9a0ff; --t-cliente: #5ccdb9; --t-lab: #a3adbd; --t-confirmar: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e131b; --surface: #151c27; --ink: #e6ebf2; --muted: #97a2b4; --line: #263143;
+  --accent: #7f98ff; --accent-ink: #0e131b; --picked: #1a2546;
+  --t-brchad: #f0b45a; --t-claude: #b9a0ff; --t-cliente: #5ccdb9; --t-lab: #a3adbd; --t-confirmar: #ff8a80;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+header.intro { padding-block: 2.25rem 1.25rem; }
+header.intro h1 { font-family: var(--display); font-weight: 800; font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.05; margin: 0 0 .5rem; letter-spacing: -.02em; text-wrap: balance; }
+header.intro p { margin: 0; color: var(--muted); max-width: 62ch; }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-block: 1px solid var(--line); }
+.bar .wrap { padding-block: .75rem; display: grid; gap: .6rem; }
+.bar-top { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; }
+.count { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: .95rem; }
+.count strong { font-family: var(--display); font-size: 1.6rem; font-weight: 800; color: var(--accent); margin-right: .25rem; }
+.status { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+.status.err { color: var(--t-confirmar); }
+.spacer { flex: 1; }
+button.copy { font: 500 .85rem var(--body); border: 1px solid var(--line); background: var(--bg); color: var(--ink); padding: .45rem .8rem; border-radius: 6px; cursor: pointer; }
+button.copy:hover { border-color: var(--accent); }
+button:focus-visible, input:focus-visible + .box, input[type="search"]:focus-visible, .chip:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.filters { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+.chip { font: 500 .8rem var(--body); border: 1px solid var(--line); background: transparent; color: var(--muted); padding: .3rem .65rem; border-radius: 99px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.sep { width: 1px; height: 1.2rem; background: var(--line); margin-inline: .2rem; }
+input[type="search"] { font: 400 .9rem var(--body); flex: 1 1 12rem; min-width: 0; padding: .4rem .7rem; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+
+main { padding-block: 1rem 4rem; }
+.year { margin-top: 1.75rem; }
+.year > h2 { font-family: var(--display); font-weight: 800; font-size: 2rem; margin: 0; display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
+.year > h2 small { font-family: var(--mono); font-weight: 400; font-size: .8rem; color: var(--muted); }
+.month { margin-top: .9rem; }
+.month > h3 { font-family: var(--mono); font-weight: 500; font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 .35rem; }
+ul.rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+li.row { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: .9rem; align-items: start; padding: .7rem .6rem; border-bottom: 1px solid var(--line); }
+li.row.on { background: var(--picked); }
+.pick { position: relative; display: block; width: 3rem; height: 3rem; cursor: pointer; }
+.pick input { position: absolute; inset: 0; opacity: 0; margin: 0; width: 100%; height: 100%; cursor: pointer; }
+.box { display: grid; place-items: center; width: 3rem; height: 3rem; border: 2px solid var(--muted); border-radius: 8px; background: var(--surface); transition: background .12s, border-color .12s; }
+.box svg { width: 1.8rem; height: 1.8rem; opacity: 0; transform: scale(.6); transition: opacity .12s, transform .12s; }
+.pick input:checked + .box { background: var(--accent); border-color: var(--accent); }
+.pick input:checked + .box svg { opacity: 1; transform: none; }
+.pick:hover .box { border-color: var(--accent); }
+.info { min-width: 0; padding-top: .1rem; }
+.info .t { font-weight: 600; font-size: 1.02rem; cursor: pointer; }
+.info .d { margin: .1rem 0 0; color: var(--muted); font-size: .9rem; max-width: 68ch; }
+.info .d.empty { font-style: italic; }
+.meta { display: flex; flex-wrap: wrap; gap: .35rem .6rem; align-items: center; margin-top: .35rem; font-family: var(--mono); font-size: .72rem; }
+.tag { padding: .05rem .4rem; border: 1px solid currentColor; border-radius: 4px; }
+.tag.brchad { color: var(--t-brchad); } .tag.claude { color: var(--t-claude); } .tag.cliente { color: var(--t-cliente); }
+.tag.lab { color: var(--t-lab); } .tag.confirmar { color: var(--t-confirmar); } .tag.aprox { color: var(--t-lab); }
+.kind { color: var(--muted); }
+.meta a { color: var(--accent); text-decoration: none; overflow-wrap: anywhere; }
+.meta a:hover { text-decoration: underline; }
+.none { color: var(--muted); padding: 2rem 0; }
+@media (max-width: 480px) { li.row { gap: .7rem; padding-inline: .2rem; } .year > h2 { font-size: 1.6rem; } }
+@media (prefers-reduced-motion: reduce) { .box, .box svg { transition: none; } }
+</style>
+
+<header class="intro wrap">
+  <h1>Seleção do Arquivo</h1>
+  <p>Todos os projetos dos últimos 36 meses, mais os antigos do brchad.com, do mais recente ao mais antigo. Marque os que entram na lista do portfolio. As marcações ficam salvas aqui e o Claude lê depois para montar o <code>projects.json</code>.</p>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="bar-top">
+      <div class="count" aria-live="polite"><strong id="nPicked">0</strong>marcados de <span id="nTotal">0</span></div>
+      <span class="status" id="status">Carregando marcações…</span>
+      <span class="spacer"></span>
+      <button class="copy" id="copyBtn" type="button">Copiar marcados</button>
+    </div>
+    <div class="filters" role="group" aria-label="Filtros">
+      <button class="chip" type="button" data-src="all" aria-pressed="true">Todos</button>
+      <button class="chip" type="button" data-src="brchad" aria-pressed="false">BRCHAD</button>
+      <button class="chip" type="button" data-src="claude" aria-pressed="false">Claude</button>
+      <button class="chip" type="button" data-src="cliente" aria-pressed="false">Clientes</button>
+      <button class="chip" type="button" data-src="lab" aria-pressed="false">Labs</button>
+      <button class="chip" type="button" data-src="confirmar" aria-pressed="false">A confirmar</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="chip" type="button" data-state="all" aria-pressed="true">Todos</button>
+      <button class="chip" type="button" data-state="on" aria-pressed="false">Marcados</button>
+      <button class="chip" type="button" data-state="off" aria-pressed="false">Não marcados</button>
+    </div>
+    <div class="filters"><input type="search" id="q" placeholder="Buscar por nome ou descrição" aria-label="Buscar"></div>
+  </div>
+</div>
+
+<main class="wrap" id="list"></main>
+
+<script type="application/json" id="data">__DATA__</script>
+<script>
+(() => {
+  const P = JSON.parse(document.getElementById("data").textContent);
+  const byId = new Map(P.map(p => [p.id, p]));
+  const TAG = { brchad: "BRCHAD", claude: "Claude", cliente: "cliente", lab: "lab", confirmar: "a confirmar", aprox: "data aproximada" };
+  const picked = new Set();      // confirmed + optimistic state
+  const pending = new Map();     // id -> desired boolean while a write is in flight
+  const queues = new Map();      // id -> promise chain (one write at a time per doc)
+  let db = null, mode = "loading";
+  let fSrc = "all", fState = "all", q = "";
+
+  const $ = id => document.getElementById(id);
+  const statusEl = $("status");
+  const setStatus = (t, err) => { statusEl.textContent = t; statusEl.classList.toggle("err", !!err); };
+  $("nTotal").textContent = P.length;
+
+  const check = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="var(--accent-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function visible(p) {
+    if (fSrc !== "all" && !p.tags.includes(fSrc)) return false;
+    if (fState === "on" && !picked.has(p.id)) return false;
+    if (fState === "off" && picked.has(p.id)) return false;
+    if (q) { const h = (p.t + " " + p.d + " " + p.k).toLowerCase(); if (!h.includes(q)) return false; }
+    return true;
+  }
+
+  function render() {
+    const focusId = document.activeElement && document.activeElement.id;
+    const list = $("list"); list.replaceChildren();
+    const years = new Map();
+    for (const p of P) { if (!years.has(p.y)) years.set(p.y, []); years.get(p.y).push(p); }
+    let shown = 0;
+    for (const [y, items] of years) {
+      const vis = items.filter(visible); if (!vis.length) continue;
+      shown += vis.length;
+      const sec = el("section", "year");
+      const h2 = el("h2", null, y === "2023" ? "2023 e antes" : y);
+      const nOn = items.filter(p => picked.has(p.id)).length;
+      h2.append(el("small", null, `${items.length} projetos · ${nOn} marcados`));
+      sec.append(h2);
+      const months = new Map();
+      for (const p of vis) { const m = y === "2023" ? "" : p.m; if (!months.has(m)) months.set(m, []); months.get(m).push(p); }
+      for (const [m, ps] of months) {
+        const box = el("div", "month");
+        if (m) box.append(el("h3", null, m));
+        const ul = el("ul", "rows");
+        for (const p of ps) ul.append(row(p, y === "2023"));
+        box.append(ul); sec.append(box);
+      }
+      list.append(sec);
+    }
+    if (!shown) list.append(el("p", "none", "Nenhum projeto com esses filtros."));
+    $("nPicked").textContent = picked.size;
+    if (focusId && focusId.startsWith("pick-")) { const f = document.getElementById(focusId); if (f) f.focus({ preventScroll: true }); }
+  }
+
+  function row(p, showWhen) {
+    const li = el("li", "row" + (picked.has(p.id) ? " on" : ""));
+    const lab = el("label", "pick");
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.id = "pick-" + p.id; cb.checked = picked.has(p.id);
+    cb.setAttribute("aria-label", p.t);
+    cb.addEventListener("change", () => toggle(p.id, cb.checked, li));
+    const box = el("span", "box"); box.innerHTML = check;
+    lab.append(cb, box);
+    const info = el("div", "info");
+    const t = el("label", "t", p.t); t.htmlFor = cb.id;
+    const d = el("p", "d" + (p.d ? "" : " empty"), p.d || "Sem descrição ainda.");
+    const meta = el("div", "meta");
+    if (showWhen && p.m) meta.append(el("span", "kind", p.m));
+    for (const tg of p.tags) meta.append(el("span", "tag " + tg, TAG[tg] || tg));
+    if (p.k) meta.append(el("span", "kind", p.k));
+    if (p.url && p.url.startsWith("https://")) {
+      const a = el("a", null, p.url.replace(/^https:\/\//, "").replace(/\/$/, ""));
+      a.href = p.url; a.target = "_blank"; a.rel = "noopener";
+      meta.append(a);
+    }
+    info.append(t, d, meta);
+    li.append(lab, info);
+    return li;
+  }
+
+  function toggle(id, on, li) {
+    if (on) picked.add(id); else picked.delete(id);
+    li.classList.toggle("on", on);
+    $("nPicked").textContent = picked.size;
+    if (mode === "db") save(id, on);
+    else if (mode === "local") saveLocal();
+  }
+
+  function save(id, on) {
+    pending.set(id, on);
+    setStatus("Salvando…");
+    const prev = queues.get(id) || Promise.resolve();
+    const next = prev.then(async () => {
+      if (pending.get(id) !== on) return;  // a newer toggle superseded this one
+      const ref = db.collection("picks").doc(id);
+      const p = byId.get(id);
+      try {
+        if (on) await ref.set({ on: true, title: p.t, year: p.y, at: new Date().toISOString() });
+        else await ref.delete();
+        if (pending.get(id) === on) pending.delete(id);
+        if (!pending.size) setStatus("Tudo salvo");
+      } catch (e) {
+        pending.delete(id);
+        setStatus("Não salvou “" + p.t + "”. Marque de novo para tentar outra vez.", true);
+      }
+    });
+    queues.set(id, next);
+  }
+
+  const LS = "selecao-arquivo-picks";
+  function saveLocal() { try { localStorage.setItem(LS, JSON.stringify([...picked])); } catch (e) {} }
+  function loadLocal() { try { (JSON.parse(localStorage.getItem(LS) || "[]")).forEach(id => byId.has(id) && picked.add(id)); } catch (e) {} }
+
+  // filters
+  document.querySelectorAll(".chip[data-src]").forEach(b => b.addEventListener("click", () => {
+    fSrc = b.dataset.src;
+    document.querySelectorAll(".chip[data-src]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    render();
+  }));
+  document.querySelectorAll(".chip[data-state]").forEach(b => b.addEventListener("click", () => {
+    fState = b.dataset.state;
+    document.querySelectorAll(".chip[data-state]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    render();
+  }));
+  let qt; $("q").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { q = e.target.value.trim().toLowerCase(); render(); }, 120); });
+
+  $("copyBtn").addEventListener("click", () => {
+    const text = P.filter(p => picked.has(p.id)).map(p => `- ${p.t} (${p.y === "2023" ? p.m : p.m + " " + p.y})`).join("\n");
+    const btn = $("copyBtn");
+    const done = ok => { btn.textContent = ok ? "Copiado" : "Não deu para copiar"; setTimeout(() => btn.textContent = "Copiar marcados", 1600); };
+    try { navigator.clipboard.writeText(text || "(nenhum marcado)").then(() => done(true), () => done(false)); } catch (e) { done(false); }
+  });
+
+  render();
+
+  // storage
+  (async () => {
+    try { db = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch (e) { db = null; }
+    if (!db) {
+      mode = "local"; loadLocal(); render();
+      setStatus("Sem conexão com o banco: as marcações ficam só neste navegador.", true);
+      return;
+    }
+    mode = "db";
+    const timer = setTimeout(() => setStatus("As marcações ainda não carregaram. Verifique a conexão.", true), 10000);
+    db.collection("picks").onSnapshot(snap => {
+      if (!snap.metadata.fromCache) clearTimeout(timer);
+      picked.clear();
+      for (const d of snap.docs) if (byId.has(d.id)) picked.add(d.id);
+      for (const [id, on] of pending) { if (on) picked.add(id); else picked.delete(id); }
+      render();
+      if (!pending.size) setStatus(snap.metadata.fromCache ? "Carregando marcações…" : "Tudo salvo");
+    }, err => {
+      clearTimeout(timer);
+      setStatus("As marcações não puderam ser carregadas (" + err.code + ").", true);
+    });
+  })();
+})();
+</script>
