@@ -134,6 +134,26 @@ a.game:hover h3{color:var(--accent)}
 button{font:500 14px var(--mono);letter-spacing:.04em;padding:12px 18px;border:1px solid var(--fg);background:transparent;color:var(--fg);cursor:pointer}
 button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
 button.primary:hover{filter:brightness(1.1)}
+/* arquivo (archive-v4.js): tela alta que rola por dentro; lista por ano numa grade densa */
+#arquivo .panel{max-width:none}
+.archive h2 em{font-style:normal;color:var(--accent)}
+.arq-stats{margin:14px 0 0;color:var(--fg)}
+.arq-filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.arq-filters button{font-size:12px;padding:7px 12px;border-color:var(--line);color:var(--muted);background:var(--glass)}
+.arq-filters button:hover{border-color:var(--accent);color:var(--accent)}
+.arq-filters button[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.arq-filters button b{font-weight:400;opacity:.7;margin-left:8px;font-variant-numeric:tabular-nums}
+.arq-year{margin-top:40px}
+.arq-year h3{font:800 clamp(1.6rem,3vw,2.2rem)/1 var(--display);letter-spacing:-.02em;display:flex;align-items:baseline;gap:12px;
+  padding-bottom:12px;border-bottom:1px solid var(--fg)}
+.arq-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:0 28px}
+.arq-grid li{border-bottom:1px solid var(--line);padding:14px 0 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.arq-grid .mono{font-size:11.5px}
+.arq-grid h4{font:500 1.08rem/1.2 var(--display);margin:2px 0 0;overflow-wrap:anywhere}
+.arq-grid a{text-decoration:none}
+.arq-grid a:hover{color:var(--accent)}
+.arq-grid p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.45}
+.arq-grid .client{color:var(--accent)}
 /* Anterior / Próximo: fixos no centro da base, por cima da cena */
 .pager{position:fixed;z-index:3;left:50%;bottom:32px;transform:translateX(-50%);display:flex;gap:8px}
 .pager button{padding:10px 14px;font-size:13px;white-space:nowrap;background:var(--glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}

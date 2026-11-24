@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="v4.css?v=11">
+<link rel="stylesheet" href="v4.css?v=12">
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -37,7 +37,7 @@
 <div class="wrap">
   <nav class="mono">
     <span data-i18n="brand">caio amaral <span class="role">/ desenvolvedor de games e produtos interativos</span></span>
-    <div class="links"><a href="#jogos" data-i18n="navJogos">jogos</a><a href="#ia" data-i18n="navIa">projetos</a><a href="#metodo" data-i18n="navMetodo">como trabalho</a><a href="#trilha" data-i18n="navTrilha">trajetória</a><a href="#contato" data-i18n="navContato">contato</a></div>
+    <div class="links"><a href="#jogos" data-i18n="navJogos">jogos</a><a href="#ia" data-i18n="navIa">projetos</a><a href="#arquivo" data-i18n="navArq">arquivo</a><a href="#metodo" data-i18n="navMetodo">como trabalho</a><a href="#trilha" data-i18n="navTrilha">trajetória</a><a href="#contato" data-i18n="navContato">contato</a></div>
     <div class="lang" role="group" aria-label="Idioma / Language">
       <button type="button" data-lang="pt" lang="pt-BR">PT</button><button type="button" data-lang="en" lang="en">EN</button>
     </div>
@@ -68,7 +68,17 @@
   </section>
   <div id="stations"></div>
   <!-- v4.js move este link para a tela do último projeto -->
-  <p class="more"><a class="btn" href="https://brchad.com/" target="_blank" rel="noopener noreferrer" data-i18n="more">Entre outros ↗</a></p>
+  <p class="more"><a class="btn" href="#arquivo" data-i18n="more">Ver todos os projetos ↓</a></p>
+
+  <!-- arquivo: todos os projetos, de archive-v4.js; v4.js monta o título com a contagem, os filtros e a lista -->
+  <section id="arquivo" class="screen"><div class="panel archive">
+    <span class="mono" data-i18n="arqLabel">Arquivo</span>
+    <h2 id="arqTitle"></h2>
+    <p class="lead" data-i18n="arqLead">Tudo o que eu fiz, do mais recente ao mais antigo: jogos para clientes, sites, puzzles, ferramentas, música e escrita.</p>
+    <p class="mono arq-stats" id="arqStats"></p>
+    <div class="arq-filters" id="arqFilters" role="group" aria-label="Filtrar por tipo" data-i18n-aria="arqFilter"></div>
+    <div id="arqList"></div>
+  </div></section>
 
   <section id="metodo" class="screen"><div class="panel">
     <span class="mono" data-i18n="metLabel">Como trabalho</span>
@@ -128,8 +138,9 @@
 <script src="projects-v2.js?v=2"></script>
 <script src="projects-v4.js?v=5"></script>
 <script src="games-v4.js?v=2"></script>
-<script src="v4-i18n.js?v=9"></script>
-<script src="v4.js?v=1"></script>
+<script src="archive-v4.js?v=1"></script>
+<script src="v4-i18n.js?v=10"></script>
+<script src="v4.js?v=2"></script>
 <script type="module" src="v4-scene.js?v=3"></script>
 </body>
 </html>

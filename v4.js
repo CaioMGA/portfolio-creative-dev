@@ -60,6 +60,77 @@
     });
   });
 
+  // arquivo (archive-v4.js): título com a contagem dos últimos 3 anos, filtros por tipo e a lista por ano
+  var arq = window.ARCHIVE || [], arqList = document.getElementById('arqList');
+  if (arqList && arq.length && i18n) (function () {
+    var title = document.getElementById('arqTitle'), stats = document.getElementById('arqStats'), bar = document.getElementById('arqFilters');
+    var t = i18n.t, now = new Date(), cur = now.getFullYear() * 12 + now.getMonth();
+    function ago(d) { return /^\d{4}-\d{2}$/.test(d) ? cur - (+d.slice(0, 4) * 12 + (+d.slice(5, 7) - 1)) : null; }
+    var n36 = arq.filter(function (p) { var m = ago(p.d); return m != null && m <= 36; }).length;
+    var q3 = arq.filter(function (p) { var m = ago(p.d); return m != null && m <= 2; }).length;
+    var clients = {}; arq.forEach(function (p) { if (p.c) clients[p.c] = 1; });
+    var nClients = Object.keys(clients).length;
+    var kinds = ['jogo', 'puzzle', 'web', 'ferramenta', 'musica', 'escrita'];
+    var filter = 'all';
+    function count(f) { return arq.filter(function (p) { return match(p, f); }).length; }
+    function match(p, f) { return f === 'all' || (f === 'cliente' ? !!p.c : p.k === f); }
+    function when(d, full) {
+      if (!d) return t('arqOngoing');
+      if (d.length === 4) return d;
+      var m = t('arqMonths')[+d.slice(5, 7) - 1];
+      return full ? m + ' ' + d.slice(0, 4) : m;
+    }
+    function chips() {
+      bar.replaceChildren();
+      ['all'].concat(kinds, ['cliente']).forEach(function (f) {
+        var n = count(f); if (!n) return;
+        var b = document.createElement('button'); b.type = 'button';
+        b.setAttribute('aria-pressed', String(f === filter));
+        b.append(f === 'all' ? t('arqAll') : f === 'cliente' ? t('arqClients') : t('arqKinds')[f]);
+        var c = document.createElement('b'); c.textContent = n; b.append(c);
+        b.addEventListener('click', function () { filter = f; render(); });
+        bar.append(b);
+      });
+    }
+    function render() {
+      title.innerHTML = t('arqTitle').replace('{n}', n36); // modelo vem do dicionário, o número é nosso
+      stats.textContent = t('arqStats').replace('{total}', arq.length).replace('{q}', q3).replace('{c}', nClients);
+      chips();
+      var groups = [], idx = {}, L = i18n.get();
+      arq.forEach(function (p) {
+        if (!match(p, filter)) return;
+        var y = p.d && p.d.slice(0, 4) >= '2023' ? p.d.slice(0, 4) : 'antes';
+        if (!(y in idx)) { idx[y] = groups.length; groups.push({ y: y, items: [] }); }
+        groups[idx[y]].items.push(p);
+      });
+      arqList.replaceChildren();
+      groups.forEach(function (g) {
+        var box = document.createElement('div'); box.className = 'arq-year';
+        var h = document.createElement('h3'); h.textContent = g.y === 'antes' ? t('arqEarlier') : g.y;
+        var c = document.createElement('span'); c.className = 'mono'; c.textContent = g.items.length;
+        h.append(c);
+        var ul = document.createElement('ul'); ul.className = 'arq-grid';
+        g.items.forEach(function (p) {
+          var x = p[L] || p.pt, li = document.createElement('li');
+          var meta = document.createElement('span'); meta.className = 'mono';
+          meta.textContent = when(p.d, g.y === 'antes') + ' · ' + t('arqKind')[p.k];
+          var h4 = document.createElement('h4');
+          if (p.u && p.u.indexOf('https://') === 0) {
+            var a = document.createElement('a'); a.href = p.u; a.target = '_blank'; a.rel = 'noopener noreferrer';
+            a.textContent = x[0] + ' ↗'; h4.append(a);
+          } else h4.textContent = x[0];
+          var d = document.createElement('p'); d.textContent = x[1];
+          li.append(meta, h4, d);
+          if (p.c) { var cl = document.createElement('span'); cl.className = 'mono client'; cl.textContent = t('arqClient') + ' · ' + p.c; li.append(cl); }
+          ul.append(li);
+        });
+        box.append(h, ul);
+        arqList.append(box);
+      });
+    }
+    fills.push(render);
+  })();
+
   function fillAll() { fills.forEach(function (f) { f(); }); }
   fillAll();
   document.addEventListener('langchange', fillAll);
@@ -182,7 +253,7 @@
     if (!busy) go(dir);
   });
 
-  document.querySelectorAll('nav a[href^="#"], #top').forEach(function (a) {
+  document.querySelectorAll('nav a[href^="#"], #top, .more a[href^="#"]').forEach(function (a) {
     a.addEventListener('click', function (e) {
       var el = document.querySelector(a.getAttribute('href'));
       if (!el || root.classList.contains('no-gl')) return;

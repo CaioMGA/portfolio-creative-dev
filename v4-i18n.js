@@ -11,6 +11,7 @@
     next: 'Next ↓',
     navJogos: 'games',
     navIa: 'projects',
+    navArq: 'archive',
     navMetodo: 'how i work',
     navTrilha: 'journey',
     navContato: 'contact',
@@ -23,7 +24,10 @@
     iaLabel: 'Products and experiments',
     iaTitle: 'From prototype to live product',
     iaLead: 'My own projects and proposals for clients, all live. AI speeds things up; the product, design and architecture decisions are mine.',
-    more: 'And more ↗',
+    more: 'See all projects ↓',
+    arqLabel: 'Archive',
+    arqLead: 'Everything I have made, newest first: games for clients, websites, puzzles, tools, music and writing.',
+    arqFilter: 'Filter by type',
     metLabel: 'How I work',
     metTitle: 'Senior judgment, AI speed',
     ph1k: '01 · define',
@@ -53,8 +57,18 @@
   };
   // textos escritos pelo JS (cópia do e-mail, botão dos cards, tooltip da cena)
   var JS = {
-    pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', viewProject: 'Ver projeto', spinTip: 'clique para girar', lampTip: 'clique para interagir' },
-    en: { copied: 'copied', copyFail: 'select and copy it manually', viewProject: 'View project', spinTip: 'click to spin', lampTip: 'click to interact' },
+    pt: { copied: 'copiado', copyFail: 'selecione e copie manualmente', viewProject: 'Ver projeto', spinTip: 'clique para girar', lampTip: 'clique para interagir',
+      arqTitle: '<em>{n} projetos</em> nos últimos 3 anos', arqStats: '{total} no arquivo · {q} nos últimos 3 meses · {c} clientes',
+      arqAll: 'Todos', arqClients: 'Clientes', arqEarlier: 'Antes', arqOngoing: 'contínuo', arqClient: 'cliente',
+      arqMonths: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
+      arqKinds: { jogo: 'Jogos', puzzle: 'Puzzles', web: 'Sites', ferramenta: 'Ferramentas', musica: 'Música', escrita: 'Escrita e arte' },
+      arqKind: { jogo: 'jogo', puzzle: 'puzzle', web: 'site', ferramenta: 'ferramenta', musica: 'música', escrita: 'escrita e arte' } },
+    en: { copied: 'copied', copyFail: 'select and copy it manually', viewProject: 'View project', spinTip: 'click to spin', lampTip: 'click to interact',
+      arqTitle: '<em>{n} projects</em> in the last 3 years', arqStats: '{total} in the archive · {q} in the last 3 months · {c} clients',
+      arqAll: 'All', arqClients: 'Clients', arqEarlier: 'Earlier', arqOngoing: 'ongoing', arqClient: 'client',
+      arqMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      arqKinds: { jogo: 'Games', puzzle: 'Puzzles', web: 'Websites', ferramenta: 'Tools', musica: 'Music', escrita: 'Writing & art' },
+      arqKind: { jogo: 'game', puzzle: 'puzzle', web: 'website', ferramenta: 'tool', musica: 'music', escrita: 'writing & art' } },
   };
   // mesma ordem final de PROJECTS (projects-v2.js + projects-v4.js): o índice casa os textos
   var PROJECTS_EN = [
