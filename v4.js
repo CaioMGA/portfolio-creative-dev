@@ -69,9 +69,9 @@
     var n36 = arq.filter(function (p) { var m = ago(p.d); return m != null && m <= 36; }).length;
     var q3 = arq.filter(function (p) { var m = ago(p.d); return m != null && m <= 2; }).length;
     var clients = {}; arq.forEach(function (p) { if (p.c) clients[p.c] = 1; });
-    var nClients = Object.keys(clients).length;
+    var nClients = Object.keys(clients).length, nClientProjects = arq.filter(function (p) { return p.c; }).length;
     var kinds = ['jogo', 'puzzle', 'web', 'ferramenta', 'musica', 'escrita'];
-    var filter = 'all';
+    var filter = 'all', opened = {}; // anos desdobrados pelo visitante
     function count(f) { return arq.filter(function (p) { return match(p, f); }).length; }
     function match(p, f) { return f === 'all' || (f === 'cliente' ? !!p.c : p.k === f); }
     function when(d, full) {
@@ -94,7 +94,9 @@
     }
     function render() {
       title.innerHTML = t('arqTitle').replace('{n}', n36); // modelo vem do dicionário, o número é nosso
-      stats.textContent = t('arqStats').replace('{total}', arq.length).replace('{q}', q3).replace('{c}', nClients);
+      // as contas fecham com os filtros: n + old = Todos, cp = Clientes
+      stats.textContent = t('arqStats').replace('{n}', n36).replace('{old}', arq.length - n36).replace('{q}', q3)
+        .replace('{cp}', nClientProjects).replace('{c}', nClients);
       chips();
       var groups = [], idx = {}, L = i18n.get();
       arq.forEach(function (p) {
@@ -106,12 +108,21 @@
       arqList.replaceChildren();
       groups.forEach(function (g) {
         var box = document.createElement('div'); box.className = 'arq-year';
-        var h = document.createElement('h3'); h.textContent = g.y === 'antes' ? t('arqEarlier') : g.y;
-        var c = document.createElement('span'); c.className = 'mono'; c.textContent = g.items.length;
-        h.append(c);
-        var ul = document.createElement('ul'); ul.className = 'arq-grid';
-        g.items.forEach(function (p) {
+        var h = document.createElement('h3');
+        // anos começam dobrados: o botão mostra o ano, o total e um quadradinho por projeto; o clique desdobra
+        var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'arq-toggle';
+        var listId = 'arq-' + g.y; btn.setAttribute('aria-controls', listId);
+        var yr = document.createElement('span'); yr.className = 'yr'; yr.textContent = g.y === 'antes' ? t('arqEarlier') : g.y;
+        var n = document.createElement('span'); n.className = 'mono n'; n.textContent = g.items.length === 1 ? t('arqCount1') : t('arqCount').replace('{n}', g.items.length);
+        var dots = document.createElement('span'); dots.className = 'dots'; dots.setAttribute('aria-hidden', 'true');
+        g.items.forEach(function () { dots.append(document.createElement('i')); });
+        var chev = document.createElement('span'); chev.className = 'chev'; chev.setAttribute('aria-hidden', 'true');
+        btn.append(yr, n, dots, chev);
+        h.append(btn);
+        var ul = document.createElement('ul'); ul.className = 'arq-grid'; ul.id = listId;
+        g.items.forEach(function (p, k) {
           var x = p[L] || p.pt, li = document.createElement('li');
+          li.style.setProperty('--i', k);
           var meta = document.createElement('span'); meta.className = 'mono';
           var span = p.from ? when(p.from, p.from.slice(0, 4) !== p.d.slice(0, 4)) + ' – ' : '';
           meta.textContent = span + when(p.d, g.y === 'antes') + ' · ' + t('arqKind')[p.k];
@@ -125,6 +136,15 @@
           if (p.c) { var cl = document.createElement('span'); cl.className = 'mono client'; cl.textContent = t('arqClient') + ' · ' + p.c; li.append(cl); }
           ul.append(li);
         });
+        function set(on, animate) {
+          opened[g.y] = on;
+          btn.setAttribute('aria-expanded', String(on));
+          box.classList.toggle('open', on);
+          ul.hidden = !on;
+          ul.classList.toggle('reveal', on && !!animate);
+        }
+        set(!!opened[g.y], false);
+        btn.addEventListener('click', function () { set(!opened[g.y], true); });
         box.append(h, ul);
         arqList.append(box);
       });
