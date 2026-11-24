@@ -61,13 +61,13 @@
       arqTitle: '<em>{n}</em> projetos recentes', arqStats: '{n} nos últimos 3 anos + {old} antes · {q} nos últimos 3 meses · {cp} para {c} clientes',
       arqAll: 'Todos', arqCount: '{n} projetos', arqCount1: '1 projeto', arqClients: 'Clientes', arqEarlier: 'Antes', arqOngoing: 'contínuo', arqClient: 'cliente',
       arqMonths: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
-      arqKinds: { jogo: 'Jogos', puzzle: 'Puzzles', web: 'Sites', ferramenta: 'Ferramentas', musica: 'Música', escrita: 'Escrita e arte' },
+      arqKinds: { jogo: 'Jogos', puzzle: 'Puzzles tradicionais', web: 'Sites', ferramenta: 'Ferramentas', musica: 'Música', escrita: 'Escrita e arte' },
       arqKind: { jogo: 'jogo', puzzle: 'puzzle', web: 'site', ferramenta: 'ferramenta', musica: 'música', escrita: 'escrita e arte' } },
     en: { copied: 'copied', copyFail: 'select and copy it manually', viewProject: 'View project', spinTip: 'click to spin', lampTip: 'click to interact',
       arqTitle: '<em>{n}</em> recent projects', arqStats: '{n} in the last 3 years + {old} earlier · {q} in the last 3 months · {cp} for {c} clients',
       arqAll: 'All', arqCount: '{n} projects', arqCount1: '1 project', arqClients: 'Clients', arqEarlier: 'Earlier', arqOngoing: 'ongoing', arqClient: 'client',
       arqMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      arqKinds: { jogo: 'Games', puzzle: 'Puzzles', web: 'Websites', ferramenta: 'Tools', musica: 'Music', escrita: 'Writing & art' },
+      arqKinds: { jogo: 'Games', puzzle: 'Traditional puzzles', web: 'Websites', ferramenta: 'Tools', musica: 'Music', escrita: 'Writing & art' },
       arqKind: { jogo: 'game', puzzle: 'puzzle', web: 'website', ferramenta: 'tool', musica: 'music', escrita: 'writing & art' } },
   };
   // mesma ordem final de PROJECTS (projects-v2.js + projects-v4.js): o índice casa os textos
