@@ -113,7 +113,8 @@
         g.items.forEach(function (p) {
           var x = p[L] || p.pt, li = document.createElement('li');
           var meta = document.createElement('span'); meta.className = 'mono';
-          meta.textContent = when(p.d, g.y === 'antes') + ' · ' + t('arqKind')[p.k];
+          var span = p.from ? when(p.from, p.from.slice(0, 4) !== p.d.slice(0, 4)) + ' – ' : '';
+          meta.textContent = span + when(p.d, g.y === 'antes') + ' · ' + t('arqKind')[p.k];
           var h4 = document.createElement('h4');
           if (p.u && p.u.indexOf('https://') === 0) {
             var a = document.createElement('a'); a.href = p.u; a.target = '_blank'; a.rel = 'noopener noreferrer';

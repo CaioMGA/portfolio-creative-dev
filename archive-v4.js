@@ -1,6 +1,6 @@
 // Arquivo da v4: todos os projetos, do mais recente ao mais antigo (a home mostra só os destaques).
 // Cada item: d = data (AAAA-MM, AAAA ou '' para contínuo), k = tipo (jogo, puzzle, web, ferramenta, musica, escrita),
-// c = cliente (opcional), u = link (opcional, https), pt/en = [título, descrição].
+// from = início de um período (opcional, AAAA-MM; d é o fim), c = cliente (opcional), u = link (opcional, https), pt/en = [título, descrição].
 // Escolhidos pelo dono em 2026-11-24 a partir de archive/all-projects.md. Clientes: data = entrega (último commit).
 window.ARCHIVE = [
   // 2026
@@ -145,6 +145,9 @@ window.ARCHIVE = [
   { d: '2026-02', k: 'web', u: 'https://www.sitesinuteis.com/',
     pt: ['SitesInuteis.com', 'Um site que te leva para um site aleatório.'],
     en: ['SitesInuteis.com', 'A site that sends you to a random site.'] },
+  { d: '2026-02', from: '2025-11', k: 'jogo', c: 'IGS',
+    pt: ['Projetos da IGS', 'Trabalhei em projetos da IGS entre novembro de 2025 e fevereiro de 2026.'],
+    en: ['IGS projects', 'I worked on IGS projects from November 2025 to February 2026.'] },
   { d: '2026-01', k: 'web', u: 'https://flw.brchad.com',
     pt: ['Famous Last Words', 'As últimas palavras de pessoas célebres.'],
     en: ['Famous Last Words', 'The last words of notorious people.'] },
